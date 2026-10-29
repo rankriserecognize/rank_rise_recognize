@@ -1,860 +1,1801 @@
 "use client";
 
-import { useState, useEffect, useId } from "react";
-import Image from "next/image";
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { motion } from "motion/react";
+import {
+  Sparkles,
+  ArrowRight,
+  Check,
+  Search,
+  Bot,
+  MapPin,
+  FileText,
+  Share2,
+  TrendingUp,
+  Layout,
+  Wrench,
+  ShieldCheck,
+  ChevronDown,
+  HelpCircle,
+  Building2,
+  Stethoscope,
+  GraduationCap,
+  Home as HomeIcon,
+  UtensilsCrossed,
+  Briefcase,
+  Layers,
+  BarChart3,
+  ExternalLink,
+} from "lucide-react";
 
-interface TimeLeft {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import AuditModal from "./components/AuditModal";
+import JsonLd from "./components/JsonLd";
+import HeroSculptureFallback from "./components/HeroSculptureFallback";
 
-interface WaitlistEntry {
-  email: string;
-  role: string;
-  vipNumber: number;
-  joinedAt: string;
-}
+// 3D Sculpture loaded strictly client-side to prevent SSR canvas issues
+const HeroSculpture = dynamic(() => import("./components/HeroSculpture"), {
+  ssr: false,
+  loading: () => <HeroSculptureFallback />,
+});
 
-export default function ComingSoonPage() {
-  const [mounted, setMounted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
-    days: 74,
-    hours: 18,
-    minutes: 42,
-    seconds: 15,
+export default function HomePage() {
+  const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
+  const [pricingPeriod, setPricingPeriod] = useState<"founding" | "regular">(
+    "founding"
+  );
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(0);
+
+  // Quick audit inline form state
+  const [quickAuditData, setQuickAuditData] = useState({
+    businessName: "",
+    websiteUrl: "",
+    whatsapp: "",
   });
+  const [quickAuditSubmitted, setQuickAuditSubmitted] = useState(false);
 
-  // Waitlist form state
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("Engineering & Tech");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submittedEntry, setSubmittedEntry] = useState<WaitlistEntry | null>(null);
-  const [copiedLink, setCopiedLink] = useState(false);
-  const [activePreviewTab, setActivePreviewTab] = useState<"leaderboard" | "ascension" | "recognition">("leaderboard");
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-  // Email input ID
-  const emailInputId = useId();
-
-  // Hydration guard & localStorage recovery
-  useEffect(() => {
-    setMounted(true);
-
-    try {
-      const saved = localStorage.getItem("rrr_vip_waitlist");
-      if (saved) {
-        setSubmittedEntry(JSON.parse(saved));
-      }
-    } catch {
-      // LocalStorage might be restricted in some environments
-    }
-
-    // Dynamic countdown calculation: Target date is set 75 days in future from first load
-    const launchTarget = new Date();
-    launchTarget.setDate(launchTarget.getDate() + 75);
-    launchTarget.setHours(launchTarget.getHours() + 14);
-
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const difference = launchTarget.getTime() - now;
-
-      if (difference > 0) {
-        setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-        });
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleWaitlistSubmit = (e: React.FormEvent) => {
+  const handleQuickAuditSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !email.includes("@")) return;
-
-    setIsSubmitting(true);
-
-    // Realistic cyber-processing delay
-    setTimeout(() => {
-      const randomVip = Math.floor(Math.random() * 200) + 480;
-      const entry: WaitlistEntry = {
-        email,
-        role,
-        vipNumber: randomVip,
-        joinedAt: new Date().toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-      };
-
-      setSubmittedEntry(entry);
-      setIsSubmitting(false);
-
-      try {
-        localStorage.setItem("rrr_vip_waitlist", JSON.stringify(entry));
-      } catch {
-        // Ignore storage errors
-      }
-    }, 850);
+    if (!quickAuditData.businessName || !quickAuditData.websiteUrl) return;
+    setQuickAuditSubmitted(true);
   };
 
-  const copyReferralLink = () => {
-    const link = `https://rankriserecognize.com/join?ref=VIP-${submittedEntry?.vipNumber || "0482"}`;
-    if (navigator?.clipboard) {
-      navigator.clipboard.writeText(link);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2500);
-    }
-  };
+  const faqs = [
+    {
+      q: "What is the difference between SEO, AEO and GEO?",
+      a: "SEO (Search Engine Optimization) helps your website rank in Google's organic list of links. AEO (Answer Engine Optimization) helps your content become the direct, quoted answer in Google AI Overviews, featured snippets, and voice search. GEO (Generative Engine Optimization) helps generative AI models like ChatGPT, Gemini, and Perplexity cite and recommend your brand when users ask conversational questions. Modern buyers use all three, so winning modern search requires all three.",
+    },
+    {
+      q: "How long does SEO and AI visibility take to show results?",
+      a: "SEO is a compounding channel. Most businesses see early ranking movement and answer block appearances within 3 months, and significant revenue and organic lead growth within 6 to 12 months. Local SEO fixes and schema implementation often move faster. We never make deceptive overnight promises; we build real, permanent authority.",
+    },
+    {
+      q: "Do you guarantee #1 rankings?",
+      a: "No. Nobody controls Google's indexing algorithm or OpenAI's neural network weights. Any agency that guarantees #1 is either using high-risk spam tactics that risk permanent Google penalties or targeting zero-traffic keywords. We commit to transparent, founder-level execution every month and clear reporting on what moved.",
+    },
+    {
+      q: "Can you get my brand mentioned in ChatGPT and Gemini?",
+      a: "While no agency can programmatically force an LLM's response, we can measurably increase the likelihood. Generative models recommend brands that have consistent entity definitions, schema markup, and authoritative citations across industry directories, forums, and editorial platforms. We optimize those exact signals and track prompt citations monthly.",
+    },
+    {
+      q: "Do I need to sign a long 12-month contract?",
+      a: "No. All our plans require a 3-month initial commitment — the minimum time needed for search engines and AI crawlers to discover, index, and reflect architectural changes. After 90 days, you continue on a flexible month-to-month agreement.",
+    },
+    {
+      q: "How do you report monthly results?",
+      a: "You receive a clear, jargon-free report focused on what matters to your business: keyword position shifts, organic search clicks, Google Business Profile phone calls and direction requests, and prompt appearance share across ChatGPT and Gemini. Higher plans include a monthly 30-minute founder strategy review.",
+    },
+  ];
 
   return (
-    <div className="relative min-h-screen w-full bg-[#06080e] text-zinc-100 overflow-x-hidden selection:bg-indigo-500/40 selection:text-white">
-      {/* Dynamic Background Atmosphere */}
-      <div className="fixed inset-0 pointer-events-none -z-10 bg-grid-pattern opacity-40" />
+    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col selection:bg-[#9C7D38]/20 selection:text-[#1A1816]">
+      <JsonLd />
+      <Navbar onOpenAudit={() => setIsAuditModalOpen(true)} />
 
-      {/* Radiant Color Mesh Blobs */}
-      <div className="fixed top-[-10%] left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-tr from-cyan-600/20 via-indigo-600/20 to-purple-600/15 rounded-full blur-[140px] pointer-events-none -z-10 animate-aurora" />
-      <div className="fixed top-[45%] right-[-15%] w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[160px] pointer-events-none -z-10" />
-      <div className="fixed bottom-[-10%] left-[-10%] w-[700px] h-[700px] bg-cyan-600/10 rounded-full blur-[160px] pointer-events-none -z-10" />
+      <main className="flex-1">
+        {/* ========================================================
+            HERO SECTION: Spacious, Classic, Real 3D Sculpture
+        ======================================================== */}
+        <section className="relative pt-32 pb-20 lg:pt-36 lg:pb-28 overflow-hidden border-b border-[#E8E2D6]/80">
+          {/* Subtle warm paper grain background */}
+          <div className="absolute inset-0 bg-[#FAF7F2] pointer-events-none" />
 
-      {/* TOP NAVIGATION / STATUS BAR */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/[0.07] bg-[#06080e]/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          {/* Brand Logo */}
-          <div className="flex items-center gap-3">
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-indigo-600 to-amber-400 p-[1px] shadow-lg shadow-cyan-500/20">
-              <div className="w-full h-full bg-[#090d16] rounded-xl flex items-center justify-center">
-                <svg
-                  className="w-5 h-5 text-amber-400"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-                  <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-                  <path d="M4 22h16" />
-                  <path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34" />
-                  <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-                </svg>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold tracking-wider text-base uppercase text-white flex items-center gap-1.5">
-                RANK <span className="text-cyan-400 font-black">RISE</span> RECOGNIZE
-              </span>
-              <span className="text-[10px] tracking-widest text-zinc-400 uppercase font-mono">
-                Performance Operating System
-              </span>
-            </div>
-          </div>
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+              {/* Left Column: Spacious Headline & Copy (7 cols) */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="lg:col-span-7 space-y-6"
+              >
+                {/* Eyebrow */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F4EFEA] border border-[#E0D8CB] rounded-xs text-[11px] font-mono uppercase tracking-widest text-[#786339] font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#9C7D38]" />
+                  SEO · AEO · GEO AGENCY FOR INDIAN BUSINESSES
+                </div>
 
-          {/* Status Indicator & Waitlist Jump */}
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>PRIVATE BETA PHASE 3.0</span>
-            </div>
+                {/* H1 Headline */}
+                <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#1A1816] font-medium tracking-tight leading-[1.12]">
+                  Rank on Google. <br />
+                  <span className="italic font-normal text-[#443E36]">
+                    Rise in revenue.
+                  </span>{" "}
+                  <br />
+                  Get recognised by AI.
+                </h1>
 
-            <a
-              href="#waitlist"
-              className="relative group inline-flex items-center justify-center px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg overflow-hidden transition-all duration-300"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-indigo-600 to-amber-500 opacity-90 group-hover:opacity-100 transition-opacity" />
-              <span className="relative flex items-center gap-1.5 text-white">
-                <span>Join VIP Waitlist</span>
-                <svg className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </span>
-            </a>
-          </div>
-        </div>
-      </header>
-
-      {/* HERO SECTION */}
-      <main className="relative pt-12 pb-24 lg:pt-20 lg:pb-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          {/* Hero Top Pill */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-panel border-white/15 shadow-xl hover:border-cyan-500/40 transition-all cursor-default">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500" />
-              </span>
-              <span className="text-xs font-mono uppercase tracking-wider text-zinc-300">
-                Next-Gen Human Motivation Platform
-              </span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r from-amber-400 to-amber-600 text-black">
-                LAUNCHING 2026
-              </span>
-            </div>
-          </div>
-
-          {/* Hero Typography */}
-          <div className="text-center max-w-4xl mx-auto space-y-6">
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08]">
-              <span className="block text-zinc-100">Ascend The Ranks.</span>
-              <span className="block text-gradient-shimmer">Master The Rise.</span>
-              <span className="block text-gradient-gold">Recognize The Best.</span>
-            </h1>
-
-            <p className="text-lg sm:text-xl text-zinc-300 max-w-2xl mx-auto font-normal leading-relaxed">
-              Transform daily milestones into legendary triumphs. An automated, gamified 
-              achievement ecosystem built for high-velocity teams, elite engineers, and modern organizations.
-            </p>
-          </div>
-
-          {/* COUNTDOWN CLOCK */}
-          <div className="mt-12 max-w-3xl mx-auto">
-            <div className="glass-panel rounded-2xl p-6 sm:p-8 border-white/10 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
-              
-              <div className="text-center mb-5">
-                <p className="text-xs uppercase font-mono tracking-widest text-cyan-400 font-semibold">
-                  OFFICIAL PUBLIC LAUNCH COUNTDOWN
+                {/* Sub-headline */}
+                <p className="text-base sm:text-lg text-[#57534E] font-normal leading-relaxed max-w-2xl">
+                  Your customers no longer just Google you. They ask ChatGPT,
+                  Gemini and Google&apos;s AI Overviews which brand to trust. We
+                  make sure your business shows up in both places: the search
+                  results and the AI answer.
                 </p>
-              </div>
 
-              <div className="grid grid-cols-4 gap-3 sm:gap-6">
-                {[
-                  { label: "DAYS", val: mounted ? timeLeft.days : 74 },
-                  { label: "HOURS", val: mounted ? timeLeft.hours : 18 },
-                  { label: "MINUTES", val: mounted ? timeLeft.minutes : 42 },
-                  { label: "SECONDS", val: mounted ? timeLeft.seconds : 15 },
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col items-center justify-center p-3 sm:p-5 rounded-xl bg-[#090e1a]/80 border border-white/10 hover:border-cyan-500/30 transition-all shadow-inner"
+                {/* Primary & Secondary Action Buttons */}
+                <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+                  <button
+                    onClick={() => setIsAuditModalOpen(true)}
+                    className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 bg-[#1A1816] text-[#FAF7F2] font-semibold text-sm rounded-xs border border-[#1A1816] hover:bg-[#2B2724] hover:border-[#9C7D38] transition-all shadow-xs group cursor-pointer"
                   >
-                    <span className="text-2xl sm:text-4xl lg:text-5xl font-black font-mono tracking-tight text-white drop-shadow-[0_2px_12px_rgba(6,182,212,0.35)]">
-                      {String(item.val).padStart(2, "0")}
+                    <Sparkles size={14} className="text-[#EADBB2]" />
+                    <span>Get Your Free AI Visibility Audit</span>
+                    <ArrowRight
+                      size={14}
+                      className="text-[#D6CFBE] group-hover:translate-x-0.5 transition-transform"
+                    />
+                  </button>
+
+                  <a
+                    href="#pricing"
+                    className="inline-flex items-center justify-center px-6 py-3.5 bg-transparent text-[#1A1816] font-semibold text-sm rounded-xs border border-[#D5CBB9] hover:bg-[#F4EFEA] hover:border-[#9C7D38] transition-all text-center"
+                  >
+                    See Transparent Pricing
+                  </a>
+                </div>
+
+                {/* Trust Strip */}
+                <div className="pt-3 border-t border-[#E8E2D6]/80 flex flex-wrap items-center gap-y-2 gap-x-5 text-xs text-[#78716C]">
+                  <div className="flex items-center gap-1.5">
+                    <Check size={14} className="text-[#9C7D38]" />
+                    <span>Transparent pricing</span>
+                  </div>
+                  <span className="text-[#D5CBB9]">•</span>
+                  <div className="flex items-center gap-1.5">
+                    <Check size={14} className="text-[#9C7D38]" />
+                    <span>3-month minimum, no 12-month lock-in</span>
+                  </div>
+                  <span className="text-[#D5CBB9]">•</span>
+                  <div className="flex items-center gap-1.5">
+                    <Check size={14} className="text-[#9C7D38]" />
+                    <span>Monthly reports in plain English</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Right Column: 3D Interactive Sculpture (5 cols) */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                className="lg:col-span-5 relative"
+              >
+                {/* Visual Label Frame */}
+                <div className="relative rounded-xs border border-[#E8E2D6] bg-[#FFFFFF] p-2 sm:p-3 shadow-xs">
+                  <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#F4EFEA] text-[10.5px] font-mono text-[#78716C]">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#9C7D38] animate-pulse" />
+                      INTERACTIVE 3D SCULPTURE
                     </span>
-                    <span className="mt-1 text-[10px] sm:text-xs font-mono tracking-wider text-zinc-400 font-semibold">
-                      {item.label}
+                    <span>MOVE CURSOR TO INSPECT</span>
+                  </div>
+
+                  {/* 3D Canvas Container */}
+                  <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[480px] bg-gradient-to-b from-[#FAF7F2] to-[#F5EFE6] rounded-xs overflow-hidden flex items-center justify-center">
+                    <HeroSculpture />
+                  </div>
+
+                  <div className="flex items-center justify-between px-3 py-2 text-[11px] text-[#78716C] bg-[#FAF7F2] rounded-xs mt-1">
+                    <span className="font-serif italic text-[#443E36]">
+                      The Spiral of Growth & AI Recognition Orbit
+                    </span>
+                    <span className="text-[10px] uppercase font-mono tracking-wider text-[#9C7D38]">
+                      Three.js / R3F
                     </span>
                   </div>
-                ))}
-              </div>
-
-              <div className="mt-5 text-center flex items-center justify-center gap-2 text-xs text-zinc-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                <span>Synchronized with Global Genesis Deployment Cluster</span>
-              </div>
+                </div>
+              </motion.div>
             </div>
           </div>
+        </section>
 
-          {/* 3D HERO VISUAL & FLOATING CARDS SHOWCASE */}
-          <div className="mt-16 lg:mt-24 relative max-w-5xl mx-auto">
-            <div className="relative flex items-center justify-center">
-              
-              {/* Backlight Rings */}
-              <div className="absolute w-[360px] sm:w-[520px] h-[360px] sm:h-[520px] rounded-full bg-gradient-to-tr from-cyan-500/25 via-indigo-600/30 to-amber-500/20 blur-3xl -z-10 animate-pulse-glow" />
-              <div className="absolute w-[280px] sm:w-[440px] h-[280px] sm:h-[440px] rounded-full border border-cyan-500/20 animate-spin-slow pointer-events-none" />
-              <div className="absolute w-[340px] sm:w-[500px] h-[340px] sm:h-[500px] rounded-full border border-dashed border-indigo-500/20 pointer-events-none" />
-
-              {/* Master 3D Trophy Image */}
-              <div className="relative group w-[280px] sm:w-[380px] md:w-[440px] aspect-square rounded-3xl overflow-hidden glass-panel border-white/20 shadow-[0_20px_80px_rgba(6,182,212,0.25)] transition-transform duration-500 group-hover:scale-[1.02]">
-                <Image
-                  src="/hero_emblem.jpg"
-                  alt="Rank Rise Recognize Grand Mastery Trophy"
-                  fill
-                  priority
-                  className="object-cover object-center"
-                  sizes="(max-width: 768px) 280px, (max-width: 1200px) 440px, 440px"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#06080e] via-transparent to-transparent opacity-60" />
-                
-                {/* Emblem Footer Caption */}
-                <div className="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-[#090e1a]/85 backdrop-blur-md border border-white/10 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-                    <div>
-                      <p className="text-xs font-bold text-white tracking-wide">Apex Champion Trophy</p>
-                      <p className="text-[10px] text-zinc-400 font-mono">Seasonal Leaderboard Genesis Tier</p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">
-                    Tier 01
-                  </span>
-                </div>
+        {/* ========================================================
+            THE PROBLEM & PARADIGM SHIFT: SEO vs AEO vs GEO
+        ======================================================== */}
+        <section className="py-20 lg:py-24 bg-[#FAF7F2] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="max-w-3xl space-y-4 mb-14">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                The Shift in Search
               </div>
-
-              {/* FLOATING CARD 1: Live Leaderboard Rank */}
-              <div className="hidden lg:flex absolute -left-6 top-8 glass-panel rounded-2xl p-4 border-white/15 shadow-2xl max-w-[260px] animate-float">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-black font-black text-sm shadow-lg shadow-amber-500/20">
-                    #1
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-bold text-white">Elena Rostova</span>
-                      <span className="text-[10px] text-amber-400 bg-amber-400/10 px-1.5 py-0.2 rounded font-mono font-bold">
-                        DIAMOND
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-zinc-400 mt-0.5">Principal Systems Architect</p>
-                    <div className="mt-2 flex items-center gap-2 text-[10px] font-mono text-cyan-400">
-                      <span>⚡ 14,820 XP</span>
-                      <span className="text-zinc-500">•</span>
-                      <span>🔥 18d Streak</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* FLOATING CARD 2: Peer Recognition Kudos */}
-              <div className="hidden lg:flex absolute -right-6 top-16 glass-panel rounded-2xl p-4 border-white/15 shadow-2xl max-w-[270px] animate-float-delayed">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-base shadow-lg shadow-indigo-500/30">
-                    💎
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs font-bold text-white">Marcus Vance</span>
-                      <span className="text-[10px] text-zinc-400">sent kudos</span>
-                    </div>
-                    <p className="text-[11px] text-zinc-300 italic mt-0.5">
-                      &ldquo;Flawless migration of core DB with 0 downtime! 🚀&rdquo;
-                    </p>
-                    <div className="mt-2 flex items-center gap-1.5">
-                      <span className="text-[10px] font-bold text-purple-300 bg-purple-500/20 px-2 py-0.5 rounded-full border border-purple-500/30">
-                        +500 Impact Bonus
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* FLOATING CARD 3: Skill Ascended */}
-              <div className="hidden sm:flex lg:hidden absolute -bottom-6 glass-panel rounded-2xl p-4 border-white/15 shadow-2xl">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold">
-                    ▲
-                  </div>
-                  <div className="text-left">
-                    <p className="text-xs font-bold text-white">Skill Mastered: Distributed Consensus</p>
-                    <p className="text-[10px] text-zinc-400 font-mono">Rank upgraded to Apex Level 4</p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          {/* WAITLIST SIGNUP COMPONENT */}
-          <div id="waitlist" className="mt-20 lg:mt-32 max-w-2xl mx-auto scroll-mt-24">
-            <div className="glass-panel rounded-3xl p-6 sm:p-10 border-white/15 shadow-[0_15px_50px_rgba(0,0,0,0.5)] relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-amber-500" />
-
-              {!submittedEntry ? (
-                <div>
-                  <div className="text-center space-y-2 mb-8">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono">
-                      <span>EXCLUSIVE PRE-RELEASE ACCESS</span>
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                      Join The Founding Pioneers Waitlist
-                    </h2>
-                    <p className="text-sm text-zinc-400">
-                      Early members receive permanent VIP Founding status, free 6 months on Enterprise Tier, 
-                      and personalized team onboarding.
-                    </p>
-                  </div>
-
-                  <form onSubmit={handleWaitlistSubmit} className="space-y-4">
-                    <div>
-                      <label htmlFor={emailInputId} className="block text-xs font-mono uppercase text-zinc-300 mb-1.5">
-                        Work or Personal Email
-                      </label>
-                      <input
-                        id={emailInputId}
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="you@company.com"
-                        className="w-full px-4 py-3.5 rounded-xl bg-[#090e1a] border border-white/15 text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 text-sm transition-all"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-mono uppercase text-zinc-300 mb-1.5">
-                        Your Primary Domain
-                      </label>
-                      <select
-                        value={role}
-                        onChange={(e) => setRole(e.target.value)}
-                        className="w-full px-4 py-3.5 rounded-xl bg-[#090e1a] border border-white/15 text-white focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/20 text-sm transition-all cursor-pointer"
-                      >
-                        <option value="Engineering & Tech">Engineering & Architecture</option>
-                        <option value="Product & Design">Product & Creative Design</option>
-                        <option value="Leadership & Executive">Team Lead / Executive Management</option>
-                        <option value="Growth & Sales">Sales, GTM & Revenue</option>
-                        <option value="People & Culture">People Operations & HR</option>
-                      </select>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-4 px-6 rounded-xl font-bold text-white text-sm tracking-wide bg-gradient-to-r from-cyan-500 via-indigo-600 to-amber-500 hover:opacity-95 active:scale-[0.99] transition-all shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24" fill="none">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                          </svg>
-                          <span>Securing Your Pioneer Token...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Claim Priority Early Access</span>
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                        </>
-                      )}
-                    </button>
-
-                    <div className="flex items-center justify-between pt-2 text-[11px] text-zinc-400">
-                      <span className="flex items-center gap-1.5">
-                        <svg className="w-3.5 h-3.5 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        Zero Spam Guarantee
-                      </span>
-                      <span>4,920+ Already Enrolled</span>
-                    </div>
-                  </form>
-                </div>
-              ) : (
-                /* SUCCESS PASS STATE */
-                <div className="space-y-6 text-center animate-fade-in">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 mx-auto flex items-center justify-center text-black font-black text-2xl shadow-xl shadow-amber-500/30">
-                    🏆
-                  </div>
-
-                  <div>
-                    <span className="text-xs font-mono font-bold text-amber-400 tracking-widest uppercase">
-                      VIP PASS CONFIRMED
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-                      Welcome to the Inner Circle
-                    </h2>
-                    <p className="text-sm text-zinc-300 mt-2">
-                      Your credentials have been securely provisioned for <span className="text-white font-mono">{submittedEntry.email}</span>.
-                    </p>
-                  </div>
-
-                  {/* VIP Card */}
-                  <div className="p-6 rounded-2xl bg-[#090e1a] border border-amber-400/30 text-left relative overflow-hidden shadow-2xl">
-                    <div className="absolute top-0 right-0 px-3 py-1 bg-gradient-to-l from-amber-500 to-amber-600 text-black font-black text-[10px] tracking-wider uppercase rounded-bl-xl">
-                      FOUNDING PIONEER
-                    </div>
-                    
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <p className="text-[10px] text-zinc-400 font-mono uppercase">WAITLIST POSITION</p>
-                        <p className="text-3xl font-black font-mono text-white">#{submittedEntry.vipNumber}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] text-zinc-400 font-mono uppercase">DIVISION</p>
-                        <p className="text-sm font-bold text-amber-400">{submittedEntry.role}</p>
-                      </div>
-                    </div>
-
-                    <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs text-zinc-400">
-                      <span>Status: Priority Queue Activated</span>
-                      <span className="font-mono text-emerald-400">● Genesis Batch</span>
-                    </div>
-                  </div>
-
-                  {/* Referral Link Sharing */}
-                  <div className="space-y-2">
-                    <p className="text-xs text-zinc-400">
-                      Want to ascend faster? Share your priority link to jump 25 spots for every colleague who joins:
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <input
-                        readOnly
-                        value={`https://rankriserecognize.com/join?ref=VIP-${submittedEntry.vipNumber}`}
-                        className="w-full px-3 py-2 rounded-lg bg-[#090e1a] border border-white/10 text-xs text-zinc-300 font-mono"
-                      />
-                      <button
-                        onClick={copyReferralLink}
-                        className="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs transition-colors shrink-0 cursor-pointer"
-                      >
-                        {copiedLink ? "Copied!" : "Copy Link"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* THE THREE PILLARS (RANK • RISE • RECOGNIZE) */}
-          <div className="mt-28 lg:mt-40">
-            <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-              <span className="text-xs font-mono tracking-widest text-cyan-400 uppercase font-semibold">
-                THE TRI-FORCE ARCHITECTURE
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-                Engineered For True High Performance
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                Search has changed. Most marketing hasn&apos;t.
               </h2>
-              <p className="text-base text-zinc-400">
-                Traditional appraisals are dead. Rank Rise Recognize merges algorithmic fairness, continuous skill mastery, and instant peer appreciation into one unified engine.
+              <p className="text-base text-[#57534E] leading-relaxed">
+                A few years ago, ranking #1 on Google was enough. Today, Google
+                shows an AI summary above the links, and millions of Indians ask
+                ChatGPT for recommendations before they visit any website. If your
+                brand isn&apos;t in that answer, the customer may never scroll down
+                to find you.
+              </p>
+              <p className="text-base text-[#57534E] leading-relaxed">
+                Most agencies still sell 2018-style SEO: keywords, backlinks and
+                a PDF report. We do that properly, and then we optimise for the
+                answer engines your customers are using right now.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-              {/* Pillar 1: Rank */}
-              <div className="glass-panel glass-panel-hover rounded-3xl p-8 border-white/10 relative overflow-hidden group">
-                <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-6 group-hover:scale-110 transition-transform">
-                  <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M18 20V10" />
-                    <path d="M12 20V4" />
-                    <path d="M6 20v-6" />
-                  </svg>
+            {/* Comparison Grid: 2018 SEO vs 2026 Rank Rise Recognize */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+              {/* Old Traditional SEO */}
+              <div className="p-6 sm:p-8 bg-[#F4EFEA] border border-[#E0D8CB] rounded-xs space-y-4">
+                <div className="text-xs font-mono uppercase tracking-wider text-[#78716C] font-semibold">
+                  The Old Model (2018)
                 </div>
-                <div className="text-xs font-mono font-bold text-cyan-400 mb-2">01 / CALIBRATION</div>
-                <h3 className="text-2xl font-bold text-white mb-3">RANK</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                  Objective, dynamic leaderboards that eliminate political bias. Track code commits, project velocity, customer impact, and custom team metrics with transparent algorithmic scoring.
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  Traditional Keyword Rankings
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  Focuses exclusively on ranking inside the standard 10 blue links
+                  on Google search. Often relies on vanity keyword volume rather
+                  than commercial intent.
                 </p>
-                <ul className="space-y-2.5 text-xs text-zinc-300 font-mono">
+                <ul className="space-y-2 text-xs text-[#57534E] pt-2 border-t border-[#E8E2D6]">
                   <li className="flex items-center gap-2">
-                    <span className="text-cyan-400">✓</span> Tiered Leagues (Bronze to Apex)
+                    <span className="text-[#78716C] font-mono">✕</span>
+                    Ignores Google AI Overviews taking up the top 60% of the screen
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-cyan-400">✓</span> Multi-dimensional scoring
+                    <span className="text-[#78716C] font-mono">✕</span>
+                    Invisible when buyers prompt ChatGPT, Gemini, or Perplexity
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-cyan-400">✓</span> Anti-gaming balance engine
+                    <span className="text-[#78716C] font-mono">✕</span>
+                    Complex jargon reports that obscure true phone calls and revenue
                   </li>
                 </ul>
+              </div>
+
+              {/* The Modern Engine: Rank Rise Recognize */}
+              <div className="p-6 sm:p-8 bg-[#FFFFFF] border-2 border-[#9C7D38]/60 rounded-xs space-y-4 shadow-sm relative">
+                <div className="absolute top-4 right-4 px-2 py-0.5 bg-[#F6EED8] text-[#84682A] text-[10px] font-mono uppercase font-semibold rounded-xs">
+                  The 2026 Standard
+                </div>
+                <div className="text-xs font-mono uppercase tracking-wider text-[#9C7D38] font-semibold">
+                  Rank Rise Recognize Strategy
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  Search + Answer Engine Optimization
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  A unified search strategy designed for both traditional Google
+                  search and generative answer engines. You rank on Google and get
+                  cited as the recommended answer by AI models.
+                </p>
+                <ul className="space-y-2 text-xs text-[#44403C] pt-2 border-t border-[#E8E2D6]">
+                  <li className="flex items-center gap-2 font-medium">
+                    <Check size={14} className="text-[#9C7D38] shrink-0" />
+                    Technical SEO and Local Google Maps dominance
+                  </li>
+                  <li className="flex items-center gap-2 font-medium">
+                    <Check size={14} className="text-[#9C7D38] shrink-0" />
+                    Schema markup and structured answer blocks for AI Overviews
+                  </li>
+                  <li className="flex items-center gap-2 font-medium">
+                    <Check size={14} className="text-[#9C7D38] shrink-0" />
+                    Entity authority across web indices so ChatGPT recommends you
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            THREE SERVICE PILLARS: Rank, Rise, Recognize
+        ======================================================== */}
+        <section id="services" className="py-20 lg:py-28 bg-[#FFFFFF] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                The Three-Step Promise
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                One agency for every place your customers search
+              </h2>
+              <p className="text-sm sm:text-base text-[#57534E]">
+                The name tells our entire process: we get you ranked, we help your
+                business rise, and we ensure you get recognized by modern AI.
+              </p>
+            </div>
+
+            {/* 3 Pillar Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Pillar 1: Rank */}
+              <div className="classic-card p-8 rounded-xs space-y-5 flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="w-12 h-12 rounded-xs bg-[#FAF7F2] border border-[#E8E2D6] flex items-center justify-center text-[#9C7D38]">
+                    <Search size={22} />
+                  </div>
+                  <div className="text-xs font-mono uppercase tracking-wider text-[#78716C]">
+                    Pillar 01 · Visibility
+                  </div>
+                  <h3 className="font-serif text-2xl font-medium text-[#1A1816]">
+                    Rank on Google and Maps
+                  </h3>
+                  <p className="text-sm text-[#57534E] leading-relaxed">
+                    Technical SEO, on-page fixes, local SEO and content that earns
+                    top positions for the searches that bring buyers, not just
+                    visitors.
+                  </p>
+                </div>
+                <div className="pt-4 border-t border-[#F4EFEA]">
+                  <a
+                    href="#all-services"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9C7D38] hover:text-[#84682A] group"
+                  >
+                    <span>Explore SEO services</span>
+                    <ArrowRight
+                      size={13}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
+                  </a>
+                </div>
               </div>
 
               {/* Pillar 2: Rise */}
-              <div className="glass-panel glass-panel-hover rounded-3xl p-8 border-white/10 relative overflow-hidden group">
-                <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
-                  <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-                  </svg>
+              <div className="classic-card p-8 rounded-xs space-y-5 flex flex-col justify-between border-[#9C7D38]/40 shadow-md">
+                <div className="space-y-4">
+                  <div className="w-12 h-12 rounded-xs bg-[#F6EED8] border border-[#9C7D38]/50 flex items-center justify-center text-[#84682A]">
+                    <TrendingUp size={22} />
+                  </div>
+                  <div className="text-xs font-mono uppercase tracking-wider text-[#9C7D38] font-semibold">
+                    Pillar 02 · Growth & CRO
+                  </div>
+                  <h3 className="font-serif text-2xl font-medium text-[#1A1816]">
+                    Rise in leads and sales
+                  </h3>
+                  <p className="text-sm text-[#57534E] leading-relaxed">
+                    Blogs, social media, Google and Meta Ads, and fast websites
+                    that turn visibility into direct phone calls, WhatsApp
+                    enquiries, and customer orders.
+                  </p>
                 </div>
-                <div className="text-xs font-mono font-bold text-indigo-400 mb-2">02 / ASCENSION</div>
-                <h3 className="text-2xl font-bold text-white mb-3">RISE</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                  RPG-inspired skill trees and career ascension. Every task, sprint, and completed initiative yields XP, opening up new mastery nodes and clear paths toward senior leadership.
-                </p>
-                <ul className="space-y-2.5 text-xs text-zinc-300 font-mono">
-                  <li className="flex items-center gap-2">
-                    <span className="text-indigo-400">✓</span> Interactive Skill Branching
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-indigo-400">✓</span> Micro-milestone streaks
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-indigo-400">✓</span> Personalized career telemetry
-                  </li>
-                </ul>
+                <div className="pt-4 border-t border-[#F4EFEA]">
+                  <a
+                    href="#all-services"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9C7D38] hover:text-[#84682A] group"
+                  >
+                    <span>Explore growth services</span>
+                    <ArrowRight
+                      size={13}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
+                  </a>
+                </div>
               </div>
 
               {/* Pillar 3: Recognize */}
-              <div className="glass-panel glass-panel-hover rounded-3xl p-8 border-white/10 relative overflow-hidden group">
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-6 group-hover:scale-110 transition-transform">
-                  <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="8" r="6" />
-                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
-                  </svg>
-                </div>
-                <div className="text-xs font-mono font-bold text-amber-400 mb-2">03 / APPRECIATION</div>
-                <h3 className="text-2xl font-bold text-white mb-3">RECOGNIZE</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                  Social gratitude in real-time. Give high-impact peer tokens, celebrate team wins publicly, and immortalize breakthrough contributions with permanent company trophy badges.
-                </p>
-                <ul className="space-y-2.5 text-xs text-zinc-300 font-mono">
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Instant micro-bonus points
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Slack & MS Teams sync
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Permanent achievement hall
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* INTERACTIVE SNEAK PEEK EXPLORER */}
-          <div className="mt-28 lg:mt-40 max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <span className="text-xs font-mono tracking-widest text-indigo-400 uppercase font-semibold">
-                PLATFORM SNEAK PEEK
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-white mt-1">
-                A First Look Inside the Dashboard
-              </h2>
-            </div>
-
-            {/* Tab Buttons */}
-            <div className="flex justify-center mb-6">
-              <div className="inline-flex p-1 rounded-xl bg-[#090e1a] border border-white/10">
-                <button
-                  onClick={() => setActivePreviewTab("leaderboard")}
-                  className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    activePreviewTab === "leaderboard"
-                      ? "bg-cyan-500 text-black shadow-md shadow-cyan-500/20"
-                      : "text-zinc-400 hover:text-white"
-                  }`}
-                >
-                  🏆 Dynamic Leaderboard
-                </button>
-                <button
-                  onClick={() => setActivePreviewTab("ascension")}
-                  className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    activePreviewTab === "ascension"
-                      ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/20"
-                      : "text-zinc-400 hover:text-white"
-                  }`}
-                >
-                  ▲ Ascension Skill Trees
-                </button>
-                <button
-                  onClick={() => setActivePreviewTab("recognition")}
-                  className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    activePreviewTab === "recognition"
-                      ? "bg-amber-500 text-black shadow-md shadow-amber-500/20"
-                      : "text-zinc-400 hover:text-white"
-                  }`}
-                >
-                  ⚡ Social Recognition
-                </button>
-              </div>
-            </div>
-
-            {/* Mock Screen Content */}
-            <div className="glass-panel rounded-2xl border-white/15 p-6 shadow-2xl relative overflow-hidden">
-              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/10">
-                <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <span className="w-3 h-3 rounded-full bg-green-500/80" />
-                <span className="ml-3 text-xs font-mono text-zinc-500">app.rankriserecognize.com/preview</span>
-              </div>
-
-              {activePreviewTab === "leaderboard" && (
-                <div className="space-y-3 animate-fade-in">
-                  <div className="flex items-center justify-between text-xs font-mono text-zinc-400 px-3">
-                    <span>RANK & CONTRIBUTOR</span>
-                    <span>TIER</span>
-                    <span>VELOCITY</span>
+              <div className="classic-card p-8 rounded-xs space-y-5 flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="w-12 h-12 rounded-xs bg-[#FAF7F2] border border-[#E8E2D6] flex items-center justify-center text-[#9C7D38]">
+                    <Bot size={22} />
                   </div>
-                  {[
-                    { rank: "01", name: "David Kim", role: "Staff Infrastructure Eng", tier: "APEX TITAN", xp: "+3,240 XP", badge: "🥇" },
-                    { rank: "02", name: "Aria Thorne", role: "Lead Product Designer", tier: "DIAMOND IV", xp: "+2,890 XP", badge: "🥈" },
-                    { rank: "03", name: "Chen Wei", role: "Senior Security Specialist", tier: "DIAMOND II", xp: "+2,410 XP", badge: "🥉" },
-                  ].map((row, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 rounded-xl bg-[#0a0f1d] border border-white/5 hover:border-cyan-500/30 transition-all">
-                      <div className="flex items-center gap-3">
-                        <span className="text-base">{row.badge}</span>
-                        <div>
-                          <p className="text-sm font-bold text-white">{row.name}</p>
-                          <p className="text-[11px] text-zinc-400">{row.role}</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-mono font-bold text-cyan-400 bg-cyan-400/10 px-2.5 py-1 rounded-md">
-                        {row.tier}
-                      </span>
-                      <span className="text-xs font-mono font-bold text-emerald-400">{row.xp}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {activePreviewTab === "ascension" && (
-                <div className="space-y-4 animate-fade-in">
-                  <div className="p-4 rounded-xl bg-[#0a0f1d] border border-white/10">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-white">Cloud Resiliency & Zero Trust Tree</span>
-                      <span className="text-xs font-mono text-indigo-400">Level 8 / 10 Mastered</span>
-                    </div>
-                    <div className="w-full h-2.5 rounded-full bg-zinc-800 overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 w-[80%]" />
-                    </div>
+                  <div className="text-xs font-mono uppercase tracking-wider text-[#78716C]">
+                    Pillar 03 · AI Search
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {[
-                      { node: "Chaos Eng", status: "UNLOCKED", pts: "+1,200 XP" },
-                      { node: "Multi-Region Mesh", status: "UNLOCKED", pts: "+950 XP" },
-                      { node: "K8s Operator", status: "IN PROGRESS", pts: "+600 XP" },
-                      { node: "Quantum Crypto", status: "LOCKED", pts: "+2,000 XP" },
-                    ].map((item, idx) => (
-                      <div key={idx} className="p-3 rounded-lg bg-[#090d18] border border-white/5 text-center">
-                        <p className="text-xs font-bold text-white mb-1">{item.node}</p>
-                        <p className={`text-[10px] font-mono font-bold ${item.status === 'UNLOCKED' ? 'text-emerald-400' : item.status === 'IN PROGRESS' ? 'text-amber-400' : 'text-zinc-500'}`}>
-                          {item.status}
-                        </p>
-                        <p className="text-[10px] text-zinc-400 mt-1">{item.pts}</p>
-                      </div>
-                    ))}
-                  </div>
+                  <h3 className="font-serif text-2xl font-medium text-[#1A1816]">
+                    Get recognised by AI
+                  </h3>
+                  <p className="text-sm text-[#57534E] leading-relaxed">
+                    AEO and GEO: structured answers, schema markup, and trusted
+                    third-party citations so ChatGPT, Gemini, Perplexity and
+                    Google AI Overviews name and recommend you.
+                  </p>
                 </div>
-              )}
-
-              {activePreviewTab === "recognition" && (
-                <div className="space-y-3 animate-fade-in">
-                  <div className="p-4 rounded-xl bg-[#0a0f1d] border border-amber-400/20">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">⭐</span>
-                        <span className="text-xs font-bold text-white">Kudos from VP of Engineering</span>
-                      </div>
-                      <span className="text-[10px] font-mono text-zinc-400">Just now</span>
-                    </div>
-                    <p className="text-xs text-zinc-300 italic">
-                      &ldquo;Phenomenal work delivering the Q3 API gateway 2 weeks ahead of schedule. Your attention to performance cut latency by 45%!&rdquo;
-                    </p>
-                    <div className="mt-3 flex items-center gap-2">
-                      <span className="text-[10px] bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded font-mono font-bold">
-                        +1,000 Token Bonus
-                      </span>
-                      <span className="text-[10px] bg-indigo-400/20 text-indigo-300 px-2 py-0.5 rounded font-mono font-bold">
-                        Spotlight Badge Unlocked
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* FAQ SECTION */}
-          <div className="mt-28 lg:mt-40 max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <span className="text-xs font-mono tracking-widest text-zinc-400 uppercase font-semibold">
-                FREQUENTLY ASKED QUESTIONS
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-white mt-1">
-                Everything You Need to Know
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              {[
-                {
-                  q: "When will Rank Rise Recognize publicly launch?",
-                  a: "Closed private beta invites begin rollout in Q3 2026. Waitlist pioneers will be onboarded in sequential cohorts based on priority waitlist number.",
-                },
-                {
-                  q: "What perks do VIP Waitlist members receive?",
-                  a: "VIP Pioneers gain permanent founding status, 6 complimentary months of Enterprise tier access, exclusive customizable trophy cosmetics, and direct roadmap input with the founders.",
-                },
-                {
-                  q: "Does it integrate with Slack, Microsoft Teams, and GitHub?",
-                  a: "Yes! Out of the box, our bots listen for pull requests, closed tickets (Jira/Linear), sales closings (Salesforce/Hubspot), and native chat shout-outs in Slack and Teams.",
-                },
-                {
-                  q: "How does the system prevent toxic competition or gaming the leaderboard?",
-                  a: "Our proprietary Calibration Engine utilizes multi-dimensional normalized metrics and peer validation consensus rather than brute quantity. It rewards quality, collaboration, and high-impact outcomes over raw spam.",
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className="glass-panel rounded-2xl border-white/10 overflow-hidden transition-all"
-                >
-                  <button
-                    onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                    className="w-full p-5 text-left flex items-center justify-between text-sm sm:text-base font-bold text-white hover:text-cyan-400 transition-colors cursor-pointer"
-                  >
-                    <span>{item.q}</span>
-                    <span className="text-cyan-400 text-lg font-mono ml-4">
-                      {openFaq === idx ? "−" : "+"}
-                    </span>
-                  </button>
-                  {openFaq === idx && (
-                    <div className="px-5 pb-5 text-xs sm:text-sm text-zinc-300 leading-relaxed border-t border-white/5 pt-3">
-                      {item.a}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* FINAL CTA BANNER */}
-          <div className="mt-28 max-w-4xl mx-auto">
-            <div className="relative rounded-3xl p-8 sm:p-12 overflow-hidden bg-gradient-to-r from-cyan-900/40 via-indigo-900/40 to-amber-900/40 border border-white/20 shadow-2xl text-center">
-              <div className="relative z-10 space-y-4">
-                <h3 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-                  Be Among The First to Ascend
-                </h3>
-                <p className="text-sm sm:text-base text-zinc-300 max-w-xl mx-auto">
-                  Reserve your company or personal VIP slot before the Genesis cohort fills.
-                </p>
-                <div className="pt-2">
+                <div className="pt-4 border-t border-[#F4EFEA]">
                   <a
-                    href="#waitlist"
-                    className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-black text-sm bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl shadow-amber-500/20"
+                    href="#all-services"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9C7D38] hover:text-[#84682A] group"
                   >
-                    <span>Claim Your VIP Pass Now</span>
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
+                    <span>Explore AI search</span>
+                    <ArrowRight
+                      size={13}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
                   </a>
                 </div>
               </div>
             </div>
           </div>
+        </section>
 
-        </div>
+        {/* ========================================================
+            FULL SERVICES GRID: Simple cards without visual clutter
+        ======================================================== */}
+        <section id="all-services" className="py-20 lg:py-24 bg-[#FAF7F2] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+              <div className="space-y-3 max-w-2xl">
+                <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                  Complete Service Suite
+                </div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                  What we do
+                </h2>
+                <p className="text-sm sm:text-base text-[#57534E]">
+                  Every service is engineered to rank you on Google, earn you
+                  citations across AI search engines, and convert traffic into revenue.
+                </p>
+              </div>
+
+              <div>
+                <button
+                  onClick={() => setIsAuditModalOpen(true)}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#1A1816] text-[#FAF7F2] text-xs font-semibold rounded-xs border border-[#1A1816] hover:bg-[#2E2A27] transition-colors cursor-pointer"
+                >
+                  <Sparkles size={13} className="text-[#EADBB2]" />
+                  <span>Request Custom Scope</span>
+                </button>
+              </div>
+            </div>
+
+            {/* 9 Clean Services Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* 1. SEO */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <Search size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#78716C]">
+                    Core SEO
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  SEO Services
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Rank for the high-intent searches that bring paying customers.
+                  Technical audits, Core Web Vitals, on-page optimization, and
+                  ethical authority.
+                </p>
+              </div>
+
+              {/* 2. AEO */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <Layers size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#9C7D38] font-semibold">
+                    AI Overviews
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  AEO (Answer Engine Optimization)
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Become the direct answer in Google AI Overviews, featured
+                  snippets, People Also Ask boxes, and conversational voice search.
+                </p>
+              </div>
+
+              {/* 3. GEO */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <Bot size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#9C7D38] font-semibold">
+                    LLM Search
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  GEO (Generative Engine Optimization)
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Get cited and recommended by ChatGPT, Gemini, Perplexity, and
+                  Claude with structured entity definitions and citation PR.
+                </p>
+              </div>
+
+              {/* 4. Local SEO */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <MapPin size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#78716C]">
+                    Maps & GBP
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Local SEO & Google Business Profile
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Own the Google Maps 3-pack in your city with full profile
+                  optimization, weekly posts, local citations, and QR review systems.
+                </p>
+              </div>
+
+              {/* 5. Content & Blogs */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <FileText size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#78716C]">
+                    Editorial
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Content & Strategic Blogs
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Research-led articles written for humans, search engines, and
+                  AI models. 1,000–2,000 words with schema markup and internal links.
+                </p>
+              </div>
+
+              {/* 6. Social Media */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <Share2 size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#78716C]">
+                    Social Trust
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Social Media Management
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Consistent Instagram, Facebook, and LinkedIn posts and reels
+                  that build brand authority and trust before the customer buys.
+                </p>
+              </div>
+
+              {/* 7. Google & Meta Ads */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <TrendingUp size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#78716C]">
+                    Paid Acquisition
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Google & Meta Ads
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Targeted search and social campaigns that bring immediate qualified
+                  leads while organic SEO compounds over the long term.
+                </p>
+              </div>
+
+              {/* 8. Website Development */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <Layout size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#78716C]">
+                    Engineered Sites
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Website Development
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  WordPress, Shopify, and custom-coded sites built SEO-ready from
+                  day one with mobile-first speed, schema markup, and analytics.
+                </p>
+              </div>
+
+              {/* 9. Website Maintenance */}
+              <div className="bg-[#FFFFFF] p-6 rounded-xs border border-[#E8E2D6] hover:border-[#9C7D38] transition-all space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                    <Wrench size={18} />
+                  </div>
+                  <span className="text-[10px] font-mono uppercase text-[#78716C]">
+                    Care & Uptime
+                  </span>
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Website Maintenance
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Security updates, daily/weekly backups, uptime monitoring, and
+                  speed checks handled every month so your business stays live.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            HOW WE WORK: 4 Clear Steps
+        ======================================================== */}
+        <section className="py-20 lg:py-24 bg-[#FFFFFF] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                Transparent Execution
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                From invisible to recommended in four steps
+              </h2>
+              <p className="text-sm sm:text-base text-[#57534E]">
+                A disciplined, predictable framework with clear milestones. No
+                vague promises, no wasted time.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Step 1 */}
+              <div className="p-6 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs space-y-4 relative">
+                <div className="text-3xl font-serif text-[#C5A566] font-light">
+                  01
+                </div>
+                <div className="text-[11px] font-mono uppercase tracking-wider text-[#78716C] font-semibold">
+                  Week 1 · Assessment
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  Audit
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  We check your current search rankings, technical website health,
+                  Google Business Profile, and test how often AI assistants mention
+                  you versus 3 key competitors.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div className="p-6 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs space-y-4 relative">
+                <div className="text-3xl font-serif text-[#C5A566] font-light">
+                  02
+                </div>
+                <div className="text-[11px] font-mono uppercase tracking-wider text-[#78716C] font-semibold">
+                  Week 2 · Blueprint
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  Plan
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  You get a clear 90-day roadmap: target high-intent keywords,
+                  specific AI prompts to win, landing pages to rebuild, and schema
+                  architecture to deploy.
+                </p>
+              </div>
+
+              {/* Step 3 */}
+              <div className="p-6 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs space-y-4 relative">
+                <div className="text-3xl font-serif text-[#C5A566] font-light">
+                  03
+                </div>
+                <div className="text-[11px] font-mono uppercase tracking-wider text-[#78716C] font-semibold">
+                  Months 1–3 · Deployment
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  Build
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  We fix all technical roadblocks, publish research-backed content,
+                  integrate structured FAQ and Service schema, and build brand
+                  mentions on trusted third-party directories.
+                </p>
+              </div>
+
+              {/* Step 4 */}
+              <div className="p-6 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs space-y-4 relative">
+                <div className="text-3xl font-serif text-[#C5A566] font-light">
+                  04
+                </div>
+                <div className="text-[11px] font-mono uppercase tracking-wider text-[#78716C] font-semibold">
+                  Monthly · Momentum
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  Grow & Report
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  A plain-English monthly report detailing rankings, organic
+                  traffic, phone calls, and AI mention share — paired with a strategy
+                  review to align on next priorities.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            FOUNDING CLIENT OFFER: Exclusive Launch Banner
+        ======================================================== */}
+        <section className="py-12 bg-[#F6EED8] border-y border-[#DFD0B0]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="space-y-2 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-[10.5px] font-mono uppercase tracking-wider text-[#84682A] font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#9C7D38]" />
+                  Launch Offer: 2 of 3 slots remaining
+                </div>
+                <h2 className="font-serif text-2xl sm:text-3xl font-medium text-[#1A1816]">
+                  3 founding client slots open
+                </h2>
+                <p className="text-xs sm:text-sm text-[#57534E] max-w-2xl leading-relaxed">
+                  We&apos;re a new agency, and we want to earn our first case
+                  studies the right way. Our first three clients get the full
+                  AI-search playbook at launch pricing, locked for six months, in
+                  exchange for an honest testimonial and permission to share results.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+                <div className="text-right sm:mr-3">
+                  <div className="text-xs font-mono text-[#78716C]">From</div>
+                  <div className="font-serif text-2xl font-semibold text-[#1A1816]">
+                    ₹7,999
+                    <span className="text-xs font-sans text-[#78716C]">/mo + GST</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setIsAuditModalOpen(true)}
+                  className="px-6 py-3 bg-[#1A1816] text-[#FAF7F2] font-semibold text-xs uppercase tracking-wider rounded-xs border border-[#1A1816] hover:bg-[#2B2724] transition-colors cursor-pointer"
+                >
+                  Claim a founding slot
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            TRANSPARENT PRICING: Founding vs Regular Packages
+        ======================================================== */}
+        <section id="pricing" className="py-20 lg:py-28 bg-[#FAF7F2] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                Transparent Rates
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                Simple, transparent pricing
+              </h2>
+              <p className="text-sm sm:text-base text-[#57534E]">
+                Every price is on this page. No &ldquo;call for a quote&rdquo; games,
+                no 12-month lock-in. All prices are monthly and exclude 18% GST.
+              </p>
+
+              {/* Pricing Period Switcher */}
+              <div className="pt-4 flex items-center justify-center">
+                <div className="p-1 bg-[#EAE2D5] border border-[#DFD7C8] rounded-xs inline-flex">
+                  <button
+                    onClick={() => setPricingPeriod("founding")}
+                    className={`px-4 py-2 text-xs font-semibold rounded-xs transition-all ${
+                      pricingPeriod === "founding"
+                        ? "bg-[#FFFFFF] text-[#1A1816] shadow-xs"
+                        : "text-[#78716C] hover:text-[#1A1816]"
+                    }`}
+                  >
+                    Founding Client Packages (Launch Offer)
+                  </button>
+                  <button
+                    onClick={() => setPricingPeriod("regular")}
+                    className={`px-4 py-2 text-xs font-semibold rounded-xs transition-all ${
+                      pricingPeriod === "regular"
+                        ? "bg-[#FFFFFF] text-[#1A1816] shadow-xs"
+                        : "text-[#78716C] hover:text-[#1A1816]"
+                    }`}
+                  >
+                    Regular Growth Packages
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* FOUNDING PACKAGES */}
+            {pricingPeriod === "founding" && (
+              <div className="space-y-8 animate-in fade-in duration-300">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {/* Launch Basic */}
+                  <div className="classic-card p-8 rounded-xs space-y-6 flex flex-col justify-between">
+                    <div className="space-y-4">
+                      <div className="text-xs font-mono uppercase tracking-wider text-[#78716C]">
+                        Launch Basic
+                      </div>
+                      <div className="space-y-1">
+                        <div className="font-serif text-3xl font-semibold text-[#1A1816]">
+                          ₹7,999
+                          <span className="text-xs font-sans font-normal text-[#78716C]">
+                            {" "}
+                            / month
+                          </span>
+                        </div>
+                        <div className="text-xs text-[#78716C]">
+                          Best for: One local shop or clinic
+                        </div>
+                      </div>
+
+                      <ul className="space-y-2.5 text-xs text-[#44403C] pt-4 border-t border-[#F4EFEA]">
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          Google Business Profile setup + weekly posts
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          15 high-intent keywords tracked
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          1 SEO / GEO blog (~1,200 words)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          On-page SEO for Homepage + 2 pages
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          2 directory / citation listings per month
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          Technical SEO initial setup
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          Monthly plain-English performance report
+                        </li>
+                      </ul>
+                    </div>
+
+                    <button
+                      onClick={() => setIsAuditModalOpen(true)}
+                      className="w-full py-3 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold rounded-xs border border-[#D5CBB9] hover:bg-[#EAE2D5] transition-colors"
+                    >
+                      Start Basic
+                    </button>
+                  </div>
+
+                  {/* Launch Plus */}
+                  <div className="classic-card p-8 rounded-xs space-y-6 flex flex-col justify-between">
+                    <div className="space-y-4">
+                      <div className="text-xs font-mono uppercase tracking-wider text-[#78716C]">
+                        Launch Plus
+                      </div>
+                      <div className="space-y-1">
+                        <div className="font-serif text-3xl font-semibold text-[#1A1816]">
+                          ₹13,499
+                          <span className="text-xs font-sans font-normal text-[#78716C]">
+                            {" "}
+                            / month
+                          </span>
+                        </div>
+                        <div className="text-xs text-[#78716C]">
+                          Best for: Growing local business
+                        </div>
+                      </div>
+
+                      <ul className="space-y-2.5 text-xs text-[#44403C] pt-4 border-t border-[#F4EFEA]">
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          Google Business Profile setup + weekly posts
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          20 target keywords tracked
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          3 SEO / GEO blogs (~1,200 words)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          On-page SEO for 5 key pages
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          8 social media static posts (IG + FB)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          3 directory / citation listings per month
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          Technical SEO setup + monthly health check
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          Monthly report
+                        </li>
+                      </ul>
+                    </div>
+
+                    <button
+                      onClick={() => setIsAuditModalOpen(true)}
+                      className="w-full py-3 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold rounded-xs border border-[#D5CBB9] hover:bg-[#EAE2D5] transition-colors"
+                    >
+                      Start Plus
+                    </button>
+                  </div>
+
+                  {/* Launch Pro — MOST CHOSEN */}
+                  <div className="classic-card p-8 rounded-xs space-y-6 flex flex-col justify-between border-2 border-[#9C7D38] shadow-lg relative bg-[#FFFFFF]">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-[#9C7D38] text-[#FAF7F2] text-[10px] font-mono uppercase font-semibold tracking-wider rounded-xs">
+                      Most Chosen · Launch Tier
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="text-xs font-mono uppercase tracking-wider text-[#9C7D38] font-semibold">
+                        Launch Pro
+                      </div>
+                      <div className="space-y-1">
+                        <div className="font-serif text-3xl font-semibold text-[#1A1816]">
+                          ₹14,999
+                          <span className="text-xs font-sans font-normal text-[#78716C]">
+                            {" "}
+                            / month
+                          </span>
+                        </div>
+                        <div className="text-xs text-[#78716C]">
+                          Best for: Local business or small D2C brand
+                        </div>
+                        <div className="text-[11px] font-mono text-[#84682A] pt-1">
+                          Worth ₹35,998 at regular rates · Just ₹500/day
+                        </div>
+                      </div>
+
+                      <ul className="space-y-2.5 text-xs text-[#1A1816] pt-4 border-t border-[#F4EFEA] font-medium">
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          Google Business Profile setup + weekly posts
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          30 keywords tracked
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          4 SEO / GEO blogs (~1,200 words)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          5 key pages + FAQ Schema markup
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          25 AI prompts tracked (ChatGPT, Gemini, AI Overviews)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          12 social posts including 4 reels
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          5 directory / citation listings per month
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          <strong>Free AI Visibility Audit</strong> (Worth ₹13,499)
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <Check size={14} className="text-[#9C7D38]" />
+                          Monthly report + 30-min strategy call
+                        </li>
+                      </ul>
+                    </div>
+
+                    <button
+                      onClick={() => setIsAuditModalOpen(true)}
+                      className="w-full py-3.5 bg-[#1A1816] text-[#FAF7F2] text-xs font-semibold rounded-xs border border-[#1A1816] hover:bg-[#2B2724] transition-colors shadow-sm"
+                    >
+                      Claim a founding slot
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-[#F5EFE6] border border-[#E8E0D1] rounded-xs text-xs text-[#57534E] leading-relaxed">
+                  <strong>Founding terms:</strong> 3-month minimum commitment.
+                  Price locked for 6 months, then smoothly transitions to our
+                  regular plans. In return, we ask for an honest testimonial, a
+                  Google review, and permission to share your anonymized growth
+                  metrics as a verified case study.
+                </div>
+              </div>
+            )}
+
+            {/* REGULAR PACKAGES */}
+            {pricingPeriod === "regular" && (
+              <div className="space-y-8 animate-in fade-in duration-300">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {/* Starter */}
+                  <div className="classic-card p-6 rounded-xs space-y-5 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="text-xs font-mono uppercase text-[#78716C]">
+                        Starter
+                      </div>
+                      <div className="font-serif text-2xl font-semibold text-[#1A1816]">
+                        ₹22,499
+                        <span className="text-xs font-sans text-[#78716C]">/mo</span>
+                      </div>
+                      <p className="text-xs text-[#78716C]">
+                        Local business, 1 location
+                      </p>
+                      <ul className="space-y-2 text-xs text-[#57534E] pt-3 border-t border-[#F4EFEA]">
+                        <li>• 25 keywords tracked</li>
+                        <li>• 20 AI prompts (ChatGPT + Google)</li>
+                        <li>• 2 SEO / GEO blogs / month</li>
+                        <li>• Homepage Schema markup</li>
+                        <li>• Google Business Profile + Local SEO</li>
+                        <li>• Monthly PDF report</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => setIsAuditModalOpen(true)}
+                      className="w-full py-2.5 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold rounded-xs border border-[#D5CBB9]"
+                    >
+                      Choose Starter
+                    </button>
+                  </div>
+
+                  {/* Growth */}
+                  <div className="classic-card p-6 rounded-xs space-y-5 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="text-xs font-mono uppercase text-[#78716C]">
+                        Growth
+                      </div>
+                      <div className="font-serif text-2xl font-semibold text-[#1A1816]">
+                        ₹49,499
+                        <span className="text-xs font-sans text-[#78716C]">/mo</span>
+                      </div>
+                      <p className="text-xs text-[#78716C]">
+                        Growing brands scaling traffic
+                      </p>
+                      <ul className="space-y-2 text-xs text-[#57534E] pt-3 border-t border-[#F4EFEA]">
+                        <li>• 50 keywords tracked</li>
+                        <li>• 40 AI prompts (ChatGPT)</li>
+                        <li>• 6 SEO / GEO blogs / month</li>
+                        <li>• Schema for up to 10 pages</li>
+                        <li>• GBP + Local SEO included</li>
+                        <li>• Quarterly strategy review</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => setIsAuditModalOpen(true)}
+                      className="w-full py-2.5 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold rounded-xs border border-[#D5CBB9]"
+                    >
+                      Choose Growth
+                    </button>
+                  </div>
+
+                  {/* AI Search Pro — MOST CHOSEN */}
+                  <div className="classic-card p-6 rounded-xs space-y-5 flex flex-col justify-between border-2 border-[#9C7D38] bg-[#FFFFFF] shadow-md relative">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-[#9C7D38] text-[#FAF7F2] text-[9.5px] font-mono uppercase font-semibold rounded-xs">
+                      Most Chosen
+                    </div>
+                    <div className="space-y-3">
+                      <div className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
+                        AI Search Pro
+                      </div>
+                      <div className="font-serif text-2xl font-semibold text-[#1A1816]">
+                        ₹53,999
+                        <span className="text-xs font-sans text-[#78716C]">/mo</span>
+                      </div>
+                      <p className="text-xs text-[#78716C]">
+                        D2C brands, clinics, growing SMBs (~₹1,775/day)
+                      </p>
+                      <ul className="space-y-2 text-xs text-[#1A1816] pt-3 border-t border-[#F4EFEA] font-medium">
+                        <li>• 100 keywords tracked</li>
+                        <li>• 100 AI prompts across all engines</li>
+                        <li>• 8 SEO / GEO blogs / month</li>
+                        <li>• Full-site Schema + FAQ blocks</li>
+                        <li>• 4 third-party citations / PR mentions</li>
+                        <li>• 12 social posts bundled (1 platform)</li>
+                        <li>• Live dashboard + monthly call</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => setIsAuditModalOpen(true)}
+                      className="w-full py-2.5 bg-[#1A1816] text-[#FAF7F2] text-xs font-semibold rounded-xs border border-[#1A1816]"
+                    >
+                      Choose AI Search Pro
+                    </button>
+                  </div>
+
+                  {/* Category Leader */}
+                  <div className="classic-card p-6 rounded-xs space-y-5 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="text-xs font-mono uppercase text-[#78716C]">
+                        Category Leader
+                      </div>
+                      <div className="font-serif text-2xl font-semibold text-[#1A1816]">
+                        ₹1,12,499
+                        <span className="text-xs font-sans text-[#78716C]">/mo</span>
+                      </div>
+                      <p className="text-xs text-[#78716C]">
+                        Multi-city or ₹25Cr+ Indian brands
+                      </p>
+                      <ul className="space-y-2 text-xs text-[#57534E] pt-3 border-t border-[#F4EFEA]">
+                        <li>• 250 keywords tracked</li>
+                        <li>• 300 AI prompts (all engines + Claude)</li>
+                        <li>• 16 articles incl. 2 pillar guides</li>
+                        <li>• Full programmatic Schema</li>
+                        <li>• 10 third-party authority placements</li>
+                        <li>• Multi-location GBP & local SEO</li>
+                        <li>• Dedicated search strategist</li>
+                      </ul>
+                    </div>
+                    <button
+                      onClick={() => setIsAuditModalOpen(true)}
+                      className="w-full py-2.5 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold rounded-xs border border-[#D5CBB9]"
+                    >
+                      Choose Leader
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-[#F5EFE6] border border-[#E8E0D1] rounded-xs text-xs text-[#57534E] flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <strong>Annual prepayment benefit:</strong> Pay for 10 months
+                    upfront, get 12 full months of service.
+                  </div>
+                  <div>
+                    <strong>GST:</strong> All prices are in INR and subject to 18% GST.
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ========================================================
+            WHY BUSINESSES CHOOSE US: 6 Real Pillars
+        ======================================================== */}
+        <section id="about" className="py-20 lg:py-24 bg-[#FFFFFF] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                Agency Philosophy
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                Why businesses choose Rank Rise Recognize
+              </h2>
+              <p className="text-sm sm:text-base text-[#57534E]">
+                We stripped away the agency bloat, the layers of junior account
+                managers, and the vanity metrics that don&apos;t pay the bills.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="space-y-2.5">
+                <div className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
+                  01 · Modern Metrics
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  We track AI visibility, not just rankings
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  Every single plan includes a monthly check of the real questions
+                  your buyers ask ChatGPT, Gemini, and Google AI Overviews.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                <div className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
+                  02 · Full Transparency
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  Our prices are on the website
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  No &ldquo;call us for a quote&rdquo; games or inflated arbitrary
+                  pitches. You know exactly what is included and what it costs.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                <div className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
+                  03 · Flexibility
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  No long lock-ins
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  A 3-month minimum to give search algorithms time to index our
+                  structural improvements, then strictly month-to-month.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                <div className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
+                  04 · Direct Contact
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  You talk to the people doing the work
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  No junior account-manager relays or broken telephone. You work
+                  directly with search strategists who write the code and content.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                <div className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
+                  05 · Human Editorial
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  No generic AI fluff
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  We use AI tools for research and velocity, but every article is
+                  planned, fact-checked, and edited by a human for genuine expertise.
+                </p>
+              </div>
+
+              <div className="space-y-2.5">
+                <div className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
+                  06 · Clarity
+                </div>
+                <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                  Reports you can actually read
+                </h3>
+                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                  Phone calls, leads, and revenue first; technical SEO jargon last.
+                  A monthly executive summary that makes business sense.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            INDUSTRIES SERVED: Clean architectural cards
+        ======================================================== */}
+        <section id="industries" className="py-20 lg:py-24 bg-[#FAF7F2] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="text-center max-w-2xl mx-auto space-y-3 mb-16">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                Market Specialization
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                Built for growing Indian businesses
+              </h2>
+              <p className="text-sm sm:text-base text-[#57534E]">
+                Tailored search architectures designed for how Indian consumers
+                discover, evaluate, and purchase.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* D2C */}
+              <div className="p-6 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-3">
+                <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                  <Briefcase size={18} />
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  D2C & E-Commerce Brands
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Get recommended when shoppers ask AI &ldquo;which brand should I
+                  buy?&rdquo;. Shopify SEO, product schema, and &ldquo;best in
+                  India&rdquo; comparison guides.
+                </p>
+              </div>
+
+              {/* Clinics & Healthcare */}
+              <div className="p-6 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-3">
+                <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                  <Stethoscope size={18} />
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Clinics & Healthcare Practices
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Be the medical practice patients find and trust first. Local
+                  Google Maps pack, doctor profile schema, and compliant medical
+                  answers.
+                </p>
+              </div>
+
+              {/* Coaching & Education */}
+              <div className="p-6 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-3">
+                <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                  <GraduationCap size={18} />
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Coaching & Education Institutes
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Fill student batches from Google organic search, not just paid
+                  ads. Course syllabus pages, results-driven content, and parent FAQs.
+                </p>
+              </div>
+
+              {/* Real Estate */}
+              <div className="p-6 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-3">
+                <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                  <HomeIcon size={18} />
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Real Estate & Developers
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Reach home buyers while they research locality amenities and
+                  price trends. Locality guides, project pages, and high-intent ads.
+                </p>
+              </div>
+
+              {/* Restaurants & Cafes */}
+              <div className="p-6 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-3">
+                <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                  <UtensilsCrossed size={18} />
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Restaurants & Cafes
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Own &ldquo;near me&rdquo; food searches. Google Maps setup, menu
+                  schema, high-resolution photo optimization, and review flows.
+                </p>
+              </div>
+
+              {/* Local Professional Services */}
+              <div className="p-6 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-3">
+                <div className="w-9 h-9 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
+                  <Building2 size={18} />
+                </div>
+                <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  Local Service Businesses
+                </h3>
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  More direct phone inquiries from your city. Google Business
+                  Profile ranking, service-area pages, and WhatsApp lead funnels.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            RESULTS & TRANSPARENT VERIFICATION: No Invented Data
+        ======================================================== */}
+        <section id="results" className="py-20 lg:py-24 bg-[#FFFFFF] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="max-w-3xl space-y-4 mb-12">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                Ethical Reporting
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                Results we&apos;ll be proud to show you
+              </h2>
+              <p className="text-base text-[#57534E] leading-relaxed">
+                We publish real numbers only: rankings, organic clicks, Google
+                Business Profile phone calls, and AI prompt citations, measured
+                from day one. We never invent testimonials, mock case studies, or
+                make up client logos.
+              </p>
+            </div>
+
+            {/* Verification Framework: 4 Core Tracking Metrics */}
+            <div className="p-8 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8E2D6] pb-4">
+                <div>
+                  <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                    Our Live Case Study Tracking Framework
+                  </h3>
+                  <p className="text-xs text-[#78716C] mt-0.5">
+                    Currently onboarding our 3 founding clients. Verified data
+                    will be published below with full audit trails.
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => setIsAuditModalOpen(true)}
+                  className="px-4 py-2 bg-[#1A1816] text-[#FAF7F2] text-xs font-semibold rounded-xs border border-[#1A1816] hover:bg-[#332F2B] transition-colors"
+                >
+                  Join Founding Cohort
+                </button>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+                <div className="p-4 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-1">
+                  <div className="text-[11px] font-mono uppercase text-[#78716C]">
+                    Metric 01
+                  </div>
+                  <div className="font-serif text-base font-semibold text-[#1A1816]">
+                    Target Keyword Rank
+                  </div>
+                  <div className="text-[11px] text-[#57534E]">
+                    Google Search Console & GA4
+                  </div>
+                </div>
+
+                <div className="p-4 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-1">
+                  <div className="text-[11px] font-mono uppercase text-[#78716C]">
+                    Metric 02
+                  </div>
+                  <div className="font-serif text-base font-semibold text-[#1A1816]">
+                    Organic Buyer Clicks
+                  </div>
+                  <div className="text-[11px] text-[#57534E]">
+                    Commercial intent visits only
+                  </div>
+                </div>
+
+                <div className="p-4 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-1">
+                  <div className="text-[11px] font-mono uppercase text-[#78716C]">
+                    Metric 03
+                  </div>
+                  <div className="font-serif text-base font-semibold text-[#1A1816]">
+                    GBP Phone Calls
+                  </div>
+                  <div className="text-[11px] text-[#57534E]">
+                    Direct Google Maps inquiries
+                  </div>
+                </div>
+
+                <div className="p-4 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-1">
+                  <div className="text-[11px] font-mono uppercase text-[#78716C]">
+                    Metric 04
+                  </div>
+                  <div className="font-serif text-base font-semibold text-[#1A1816]">
+                    AI Prompt Citations
+                  </div>
+                  <div className="text-[11px] text-[#57534E]">
+                    ChatGPT, Gemini & AI Overviews
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            LEAD GENERATION / AI VISIBILITY AUDIT HERO FORM
+        ======================================================== */}
+        <section id="audit" className="py-20 lg:py-24 bg-[#FAF7F2] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div className="lg:col-span-6 space-y-4">
+                <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                  Complimentary 10-Prompt Check
+                </div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                  Find out what Google and ChatGPT say about your business
+                </h2>
+                <p className="text-sm sm:text-base text-[#57534E] leading-relaxed">
+                  We&apos;ll test 10 real customer questions across ChatGPT,
+                  Gemini, and Google AI Overviews, and show you where you appear,
+                  where competitors appear, and what to fix first. Free, no
+                  obligation, delivered in 3 working days.
+                </p>
+
+                <div className="pt-2 space-y-3 text-xs sm:text-sm text-[#44403C]">
+                  <div className="flex items-start gap-2.5">
+                    <Check size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+                    <span>
+                      <strong>Your AI visibility score:</strong> How many of 10
+                      customer questions recommend your brand.
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <Check size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+                    <span>
+                      <strong>Competitor benchmark:</strong> Which rival
+                      businesses AI tools suggest instead of yours.
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-2.5">
+                    <Check size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+                    <span>
+                      <strong>Top 3 priority fixes:</strong> Direct, actionable
+                      adjustments to make in plain English.
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Inline Form Card */}
+              <div className="lg:col-span-6">
+                <div className="bg-[#FFFFFF] border border-[#DFD7C8] rounded-xs p-6 sm:p-8 shadow-md">
+                  {!quickAuditSubmitted ? (
+                    <form onSubmit={handleQuickAuditSubmit} className="space-y-4">
+                      <div className="font-serif text-xl font-medium text-[#1A1816]">
+                        Request Free AI Visibility Check
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
+                          Business Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={quickAuditData.businessName}
+                          onChange={(e) =>
+                            setQuickAuditData({
+                              ...quickAuditData,
+                              businessName: e.target.value,
+                            })
+                          }
+                          placeholder="e.g. Organic Heritage D2C"
+                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
+                          Website or Google Maps URL *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={quickAuditData.websiteUrl}
+                          onChange={(e) =>
+                            setQuickAuditData({
+                              ...quickAuditData,
+                              websiteUrl: e.target.value,
+                            })
+                          }
+                          placeholder="https://yourbusiness.com"
+                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
+                          WhatsApp Number *
+                        </label>
+                        <input
+                          type="tel"
+                          required
+                          value={quickAuditData.whatsapp}
+                          onChange={(e) =>
+                            setQuickAuditData({
+                              ...quickAuditData,
+                              whatsapp: e.target.value,
+                            })
+                          }
+                          placeholder="+91 98765 43210"
+                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full py-3.5 bg-[#1A1816] text-[#FAF7F2] font-semibold text-xs uppercase tracking-wider rounded-xs border border-[#1A1816] hover:bg-[#2B2724] transition-colors cursor-pointer flex items-center justify-center gap-2"
+                      >
+                        <Sparkles size={14} className="text-[#EADBB2]" />
+                        <span>Get My Free AI Visibility Check</span>
+                      </button>
+
+                      <p className="text-[11px] text-center text-[#78716C] font-mono">
+                        No spam. Delivered to your WhatsApp within 3 working days.
+                      </p>
+                    </form>
+                  ) : (
+                    <div className="py-6 text-center space-y-3">
+                      <div className="w-12 h-12 mx-auto rounded-full bg-[#F6EED8] border border-[#9C7D38] flex items-center justify-center text-[#9C7D38]">
+                        <Check size={24} />
+                      </div>
+                      <h3 className="font-serif text-xl font-medium text-[#1A1816]">
+                        Audit Queued Successfully
+                      </h3>
+                      <p className="text-xs text-[#57534E] leading-relaxed">
+                        We have logged <strong>{quickAuditData.businessName}</strong>.
+                        Our analysts will test 10 queries across ChatGPT, Gemini,
+                        and Google AI Overviews and message your WhatsApp at{" "}
+                        <strong>{quickAuditData.whatsapp}</strong>.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            FREQUENTLY ASKED QUESTIONS (FAQ)
+        ======================================================== */}
+        <section id="faq" className="py-20 lg:py-24 bg-[#FFFFFF] border-b border-[#E8E2D6]">
+          <div className="max-w-4xl mx-auto px-5 sm:px-8">
+            <div className="text-center space-y-3 mb-14">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                Questions & Answers
+              </div>
+              <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                Frequently asked questions
+              </h2>
+              <p className="text-sm text-[#57534E]">
+                Everything you need to know about our SEO, AEO, and GEO methodologies.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {faqs.map((faq, index) => {
+                const isOpen = expandedFaq === index;
+                return (
+                  <div
+                    key={index}
+                    className="border border-[#E8E2D6] rounded-xs bg-[#FAF7F2] overflow-hidden"
+                  >
+                    <button
+                      onClick={() => setExpandedFaq(isOpen ? null : index)}
+                      className="w-full text-left px-6 py-4 flex items-center justify-between gap-4 font-serif text-base sm:text-lg font-medium text-[#1A1816] hover:text-[#9C7D38] transition-colors cursor-pointer"
+                    >
+                      <span>{faq.q}</span>
+                      <ChevronDown
+                        size={18}
+                        className={`text-[#78716C] transition-transform duration-200 shrink-0 ${
+                          isOpen ? "rotate-180 text-[#9C7D38]" : ""
+                        }`}
+                      />
+                    </button>
+                    {isOpen && (
+                      <div className="px-6 pb-5 pt-1 text-xs sm:text-sm text-[#57534E] leading-relaxed border-t border-[#E8E2D6]/60">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            STRATEGIC LAUNCH BLOG PREVIEWS
+        ======================================================== */}
+        <section id="blog" className="py-20 lg:py-24 bg-[#FAF7F2] border-b border-[#E8E2D6]">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+              <div className="space-y-3">
+                <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+                  Search & AI Intelligence
+                </div>
+                <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1816] font-medium tracking-tight">
+                  Latest insights from our lab
+                </h2>
+                <p className="text-sm text-[#57534E]">
+                  In-depth strategic guides on winning modern search algorithms.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setIsAuditModalOpen(true)}
+                className="text-xs font-semibold text-[#9C7D38] hover:text-[#84682A] flex items-center gap-1"
+              >
+                Subscribe to research updates →
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Article 1 */}
+              <div className="bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs p-6 space-y-3 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="text-[10px] font-mono uppercase text-[#9C7D38] font-semibold">
+                    Core Strategy · 2026
+                  </div>
+                  <h3 className="font-serif text-lg font-medium text-[#1A1816] hover:text-[#9C7D38] transition-colors cursor-pointer">
+                    SEO vs AEO vs GEO: What Indian Businesses Need to Know in 2026
+                  </h3>
+                  <p className="text-xs text-[#57534E] leading-relaxed">
+                    Why the traditional 10 blue links on Google are no longer
+                    sufficient, and how generative engines choose who gets cited.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-[#F4EFEA] text-[11px] font-mono text-[#78716C]">
+                  Target Keyword: SEO vs AEO vs GEO
+                </div>
+              </div>
+
+              {/* Article 2 */}
+              <div className="bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs p-6 space-y-3 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="text-[10px] font-mono uppercase text-[#9C7D38] font-semibold">
+                    Generative Search
+                  </div>
+                  <h3 className="font-serif text-lg font-medium text-[#1A1816] hover:text-[#9C7D38] transition-colors cursor-pointer">
+                    How to Get Your Brand Mentioned in ChatGPT (Step by Step)
+                  </h3>
+                  <p className="text-xs text-[#57534E] leading-relaxed">
+                    The exact entity building, third-party citation, and schema
+                    playbook required to make language models recognize your brand.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-[#F4EFEA] text-[11px] font-mono text-[#78716C]">
+                  Target Keyword: how to rank in ChatGPT
+                </div>
+              </div>
+
+              {/* Article 3 */}
+              <div className="bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs p-6 space-y-3 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="text-[10px] font-mono uppercase text-[#9C7D38] font-semibold">
+                    Google AI Overviews
+                  </div>
+                  <h3 className="font-serif text-lg font-medium text-[#1A1816] hover:text-[#9C7D38] transition-colors cursor-pointer">
+                    Google AI Overviews: How to Show Up in Them
+                  </h3>
+                  <p className="text-xs text-[#57534E] leading-relaxed">
+                    How to format concise 40–60 word answer blocks and structured
+                    FAQ schema so Google quotes your website in its top AI snapshot.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-[#F4EFEA] text-[11px] font-mono text-[#78716C]">
+                  Target Keyword: Google AI Overviews optimization
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================
+            FINAL CONTACT CALL TO ACTION
+        ======================================================== */}
+        <section id="contact" className="py-20 lg:py-28 bg-[#1A1816] text-[#FAF7F2]">
+          <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#292524] border border-[#3E3832] rounded-xs text-[11px] font-mono uppercase tracking-widest text-[#EADBB2]">
+              <Sparkles size={12} className="text-[#C5A566]" />
+              Start Your Growth Journey
+            </div>
+
+            <h2 className="font-serif text-3xl sm:text-5xl font-medium tracking-tight text-[#FAF7F2] leading-tight">
+              Ready to rank on Google and be recommended by AI?
+            </h2>
+
+            <p className="text-sm sm:text-base text-[#D6CFBE] max-w-xl mx-auto leading-relaxed">
+              We reply within one working day. Get your complimentary 10-prompt
+              audit report or discuss a custom SEO + GEO growth retainer.
+            </p>
+
+            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button
+                onClick={() => setIsAuditModalOpen(true)}
+                className="w-full sm:w-auto px-8 py-3.5 bg-[#FAF7F2] text-[#1A1816] font-semibold text-xs uppercase tracking-wider rounded-xs border border-[#FAF7F2] hover:bg-[#EAE2D5] transition-colors cursor-pointer"
+              >
+                Get Free AI Visibility Check
+              </button>
+
+              <a
+                href="mailto:contact@rankriserecognize.com"
+                className="w-full sm:w-auto px-8 py-3.5 bg-transparent text-[#FAF7F2] font-semibold text-xs uppercase tracking-wider rounded-xs border border-[#443E36] hover:border-[#9C7D38] transition-colors"
+              >
+                Email Our Strategists
+              </a>
+            </div>
+
+            <div className="pt-6 text-xs text-[#A8A29E] font-mono">
+              Bengaluru, Karnataka · Virtual Delivery Across India · +91 [Direct Support]
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* FOOTER */}
-      <footer className="w-full border-t border-white/10 bg-[#04060a] py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#090e1a] border border-white/10 flex items-center justify-center text-amber-400 font-black text-xs">
-              RRR
-            </div>
-            <div>
-              <p className="text-xs font-bold text-white tracking-wider">
-                RANK RISE RECOGNIZE
-              </p>
-              <p className="text-[10px] text-zinc-500">
-                © 2026 Rank Rise Recognize Inc. All rights reserved.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6 text-xs text-zinc-400">
-            <a href="#waitlist" className="hover:text-cyan-400 transition-colors">VIP Waitlist</a>
-            <span className="text-zinc-700">•</span>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors">Twitter (X)</a>
-            <span className="text-zinc-700">•</span>
-            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors">Discord</a>
-            <span className="text-zinc-700">•</span>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors">LinkedIn</a>
-          </div>
-
-          <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-500">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Pre-Release Build v0.9.4 • Systems Operational</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
+      <AuditModal
+        isOpen={isAuditModalOpen}
+        onClose={() => setIsAuditModalOpen(false)}
+      />
     </div>
   );
 }
