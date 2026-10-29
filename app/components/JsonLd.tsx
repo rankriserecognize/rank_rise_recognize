@@ -14,8 +14,10 @@ export default function JsonLd() {
     ],
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "Bengaluru",
-      "addressRegion": "Karnataka",
+      "streetAddress": "Amaravathi",
+      "addressLocality": "Hosapete",
+      "addressRegion": "Viajayanagar, Karnataka",
+      "postalCode": "583201",
       "addressCountry": "IN"
     }
   };
@@ -27,11 +29,13 @@ export default function JsonLd() {
     "image": "https://rankriserecognize.com/og-image.jpg",
     "url": "https://rankriserecognize.com",
     "priceRange": "₹7,999 - ₹1,12,499 per month",
-    "telephone": "+91-9876543210",
+    "telephone": "+91-9490067869",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "Bengaluru",
-      "addressRegion": "Karnataka",
+      "streetAddress": "Amaravathi",
+      "addressLocality": "Hosapete",
+      "addressRegion": "Viajayanagar, Karnataka",
+      "postalCode": "583201",
       "addressCountry": "IN"
     },
     "openingHoursSpecification": [

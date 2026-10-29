@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Check, Send, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Check, Send, ShieldCheck, CheckCircle2, Sparkles } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -26,161 +26,136 @@ export default function AuditLandingPage() {
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
-    }, 1200);
+    }, 1000);
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col">
+    <div className="min-h-screen bg-[#e5e7eb] text-[#202020] flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             {/* Left Content Column */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F4EFEA] border border-[#E0D8CB] rounded-xs text-[11px] font-mono uppercase tracking-widest text-[#786339] font-medium">
-                Free 10-Prompt Search Audit
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ffffff] border-2 border-[#000000] text-[12px] font-bold text-[#202020] uppercase tracking-wider">
+                <Sparkles size={13} className="text-[#202020]" />
+                <span>FREE 10-PROMPT DIAGNOSTIC</span>
               </div>
 
-              <h1 className="font-serif text-3xl sm:text-5xl text-[#1A1816] font-medium tracking-tight leading-[1.15]">
+              <h1 className="text-display-hero">
                 Does ChatGPT recommend your business, or your competitor?
               </h1>
 
-              <p className="text-base sm:text-lg text-[#57534E] leading-relaxed">
+              <p className="text-[18px] text-[#202020]/80 leading-relaxed font-normal">
                 We&apos;ll ask ChatGPT, Gemini and Google 10 questions your
                 customers ask, and show you exactly who gets recommended. Free.
                 Delivered in 3 working days via WhatsApp or email.
               </p>
 
-              {/* What You'll Get */}
-              <div className="p-6 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-4">
-                <div className="text-xs font-mono uppercase tracking-wider text-[#9C7D38] font-semibold">
-                  What Your Audit Report Includes:
+              {/* What You'll Get in Ko-fi Oat Feature Card */}
+              <div className="oat-feature-card p-8 space-y-4">
+                <div className="text-[12px] font-bold text-[#202020] uppercase tracking-wider">
+                  Deliverable Specification
                 </div>
-                <ul className="space-y-3 text-xs sm:text-sm text-[#44403C]">
+                <ul className="space-y-3.5 text-[15px] text-[#202020]/85 font-medium">
                   <li className="flex items-start gap-2.5">
-                    <Check size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+                    <Check size={18} className="text-[#000000] shrink-0 mt-0.5" />
                     <span>
-                      <strong>Your AI Visibility Score:</strong> How many of 10
+                      <strong className="text-[#202020]">AI Visibility Score:</strong> How many of 10
                       key customer queries directly mention your brand.
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Check size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+                    <Check size={18} className="text-[#000000] shrink-0 mt-0.5" />
                     <span>
-                      <strong>Competitor Benchmark:</strong> Which competitors AI
+                      <strong className="text-[#202020]">Competitor Benchmark:</strong> Which competitors AI
                       tools recommend instead and why they win the citation.
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Check size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+                    <Check size={18} className="text-[#000000] shrink-0 mt-0.5" />
                     <span>
-                      <strong>Google Organic Snapshot:</strong> Your positions
+                      <strong className="text-[#202020]">Google Organic Snapshot:</strong> Your positions
                       for 5 high-intent searches and your Google Maps ranking.
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Check size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+                    <Check size={18} className="text-[#000000] shrink-0 mt-0.5" />
                     <span>
-                      <strong>Top 3 Quick Fixes:</strong> Clear, actionable
+                      <strong className="text-[#202020]">Top 3 Quick Fixes:</strong> Clear, actionable
                       adjustments to make immediately in plain English.
                     </span>
                   </li>
                 </ul>
               </div>
-
-              {/* Process */}
-              <div className="space-y-3 pt-2">
-                <div className="text-xs font-mono uppercase tracking-wider text-[#78716C] font-semibold">
-                  How It Works
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-[#57534E]">
-                  <div className="p-3 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs">
-                    <strong>1. Fill form</strong> (2 minutes)
-                  </div>
-                  <div className="p-3 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs">
-                    <strong>2. We test 10 queries</strong> across AI models
-                  </div>
-                  <div className="p-3 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs">
-                    <strong>3. Get your report</strong> on WhatsApp / Email
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Right Form Column */}
             <div className="lg:col-span-6">
-              <div className="bg-[#FFFFFF] border border-[#DFD7C8] rounded-xs p-6 sm:p-8 shadow-lg">
+              <div className="sticker-card p-7 sm:p-10 space-y-4 bg-white">
                 {!isSuccess ? (
                   <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="space-y-1 border-b border-[#F4EFEA] pb-3">
-                      <h2 className="font-serif text-2xl font-medium text-[#1A1816]">
-                        Claim Your Complimentary Audit
+                    <div className="space-y-1 border-b-2 border-[#e5e7eb] pb-3">
+                      <h2 className="font-display text-[26px] text-[#202020]">
+                        Request Your Complimentary Audit
                       </h2>
-                      <p className="text-xs text-[#78716C]">
-                        Delivered in 3 working days. No credit card required.
+                      <p className="text-[14px] text-[#202020]/75">
+                        No sales call required. We test queries and deliver your PDF on WhatsApp.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
-                          Your Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
-                          }
-                          placeholder="e.g. Anand Budur"
-                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-[13px] font-bold text-[#202020] mb-1">
+                        Your Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.name}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
+                        placeholder="e.g. Priya Sharma"
+                        className="w-full kofi-input"
+                      />
+                    </div>
 
-                      <div>
-                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
-                          Business Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.businessName}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              businessName: e.target.value,
-                            })
-                          }
-                          placeholder="e.g. Organic Heritage"
-                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
-                        />
-                      </div>
+                    <div>
+                      <label className="block text-[13px] font-bold text-[#202020] mb-1">
+                        Business Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.businessName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, businessName: e.target.value })
+                        }
+                        placeholder="e.g. Ayurveda Botanics"
+                        className="w-full kofi-input"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[13px] font-bold text-[#202020] mb-1">
+                        Website or Google Maps URL *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.websiteUrl}
+                        onChange={(e) =>
+                          setFormData({ ...formData, websiteUrl: e.target.value })
+                        }
+                        placeholder="https://ayurvedabotanics.com"
+                        className="w-full kofi-input"
+                      />
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
-                          Website or GBP URL *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.websiteUrl}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              websiteUrl: e.target.value,
-                            })
-                          }
-                          placeholder="https://yourbrand.com"
-                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
+                        <label className="block text-[13px] font-bold text-[#202020] mb-1">
                           City / Target Area *
                         </label>
                         <input
@@ -190,38 +165,36 @@ export default function AuditLandingPage() {
                           onChange={(e) =>
                             setFormData({ ...formData, city: e.target.value })
                           }
-                          placeholder="e.g. Bengaluru, Pan-India"
-                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
+                          placeholder="e.g. Mumbai, Pan-India"
+                          className="w-full kofi-input"
                         />
                       </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
+                        <label className="block text-[13px] font-bold text-[#202020] mb-1">
                           Industry *
                         </label>
                         <select
                           value={formData.industry}
                           onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              industry: e.target.value,
-                            })
+                            setFormData({ ...formData, industry: e.target.value })
                           }
-                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
+                          className="w-full kofi-input cursor-pointer"
                         >
                           <option value="D2C & E-Commerce">D2C & E-Commerce</option>
                           <option value="Clinics & Healthcare">Clinics & Healthcare</option>
                           <option value="Coaching & Education">Coaching & Education</option>
                           <option value="Real Estate & Property">Real Estate & Property</option>
                           <option value="Restaurants & Cafes">Restaurants & Cafes</option>
-                          <option value="Local Professional Services">Local Professional Services</option>
+                          <option value="Local Professional Services">Local Services</option>
+                          <option value="B2B & Manufacturing">B2B & Manufacturing</option>
                         </select>
                       </div>
+                    </div>
 
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
+                        <label className="block text-[13px] font-bold text-[#202020] mb-1">
                           WhatsApp Number *
                         </label>
                         <input
@@ -229,113 +202,91 @@ export default function AuditLandingPage() {
                           required
                           value={formData.whatsapp}
                           onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              whatsapp: e.target.value,
-                            })
+                            setFormData({ ...formData, whatsapp: e.target.value })
                           }
-                          placeholder="+91 98765 43210"
-                          className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
+                          placeholder="+91 94900 67869"
+                          className="w-full kofi-input"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[13px] font-bold text-[#202020] mb-1">
+                          Email Address *
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={formData.email}
+                          onChange={(e) =>
+                            setFormData({ ...formData, email: e.target.value })
+                          }
+                          placeholder="priya@ayurvedabotanics.com"
+                          className="w-full kofi-input"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
-                        Email Address *
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
-                        placeholder="founder@company.com"
-                        className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1">
+                      <label className="block text-[13px] font-bold text-[#202020] mb-1">
                         Top 2 Competitors (Optional)
                       </label>
                       <input
                         type="text"
                         value={formData.competitors}
                         onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            competitors: e.target.value,
-                          })
+                          setFormData({ ...formData, competitors: e.target.value })
                         }
-                        placeholder="e.g. Rival Brand X, Rival Brand Y"
-                        className="w-full px-3.5 py-2.5 bg-[#FAF7F2] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
+                        placeholder="e.g. Forest Essentials, Kama Ayurveda"
+                        className="w-full kofi-input"
                       />
                     </div>
 
-                    <div className="p-3 bg-[#F5EFE6] border border-[#E8E0D1] rounded-xs text-xs text-[#57534E] flex items-start gap-2">
-                      <ShieldCheck size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+                    <div className="p-4 bg-[#e9dfd2] border-2 border-[#000000] rounded-[24px] text-[13px] text-[#202020] flex items-start gap-2.5">
+                      <ShieldCheck size={18} className="text-[#000000] shrink-0 mt-0.5" />
                       <span>
-                        Strict privacy guarantee. No sales spam. We only use this
-                        information to generate and deliver your 10-prompt audit.
+                        <strong>Strict privacy policy:</strong> We only test your 10 queries and deliver your diagnostic breakdown. No marketing spam.
                       </span>
                     </div>
 
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-3.5 bg-[#1A1816] text-[#FAF7F2] font-semibold text-xs uppercase tracking-wider rounded-xs border border-[#1A1816] hover:bg-[#2B2724] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
-                    >
-                      {isSubmitting ? (
-                        <span>Analyzing & Scheduling Audit...</span>
-                      ) : (
-                        <>
-                          <Sparkles size={14} className="text-[#EADBB2]" />
-                          <span>Send My Free AI Visibility Check</span>
-                        </>
-                      )}
-                    </button>
+                    <div className="pt-2">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full py-4 btn-kofi-primary text-[16px] cursor-pointer disabled:opacity-60"
+                      >
+                        {isSubmitting ? (
+                          <span>Testing 10 Queries...</span>
+                        ) : (
+                          <>
+                            <span>Queue Free AI Visibility Audit</span>
+                            <Send size={16} className="ml-1" />
+                          </>
+                        )}
+                      </button>
+                      <p className="text-[12px] text-center text-[#202020]/70 mt-2 font-medium">
+                        Delivered to WhatsApp within 3 working days.
+                      </p>
+                    </div>
                   </form>
                 ) : (
-                  <div className="py-10 text-center space-y-4">
-                    <div className="w-14 h-14 mx-auto rounded-full bg-[#F6EED8] border border-[#9C7D38] flex items-center justify-center text-[#9C7D38]">
-                      <CheckCircle2 size={32} />
+                  <div className="py-12 text-center space-y-4">
+                    <div className="w-16 h-16 mx-auto rounded-full bg-[#aac9f7] border-3 border-[#000000] flex items-center justify-center text-[#202020]">
+                      <CheckCircle2 size={34} />
                     </div>
-                    <h3 className="font-serif text-2xl font-medium text-[#1A1816]">
-                      Audit Queued Successfully
+
+                    <h3 className="font-display text-[28px] text-[#202020]">
+                      Audit Queued Successfully!
                     </h3>
-                    <p className="text-sm text-[#57534E] leading-relaxed max-w-md mx-auto">
-                      Thank you, <strong>{formData.name}</strong>. Our team is
-                      running the 10-prompt test for{" "}
-                      <strong>{formData.businessName}</strong>. You will receive
-                      your full report on WhatsApp at{" "}
-                      <strong>{formData.whatsapp}</strong> within 3 working days.
+
+                    <p className="text-[15px] text-[#202020]/80 leading-relaxed max-w-md mx-auto">
+                      We have queued <strong>{formData.businessName}</strong>. Our
+                      search strategists will test 10 realistic customer queries
+                      and deliver your diagnostic to{" "}
+                      <strong className="text-[#202020]">{formData.whatsapp}</strong>{" "}
+                      within 3 business days.
                     </p>
                   </div>
                 )}
-              </div>
-
-              {/* Upsell to Full Audit */}
-              <div className="mt-6 p-6 bg-[#FAF7F2] border border-[#E8E2D6] rounded-xs space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
-                    Upgrade Option
-                  </span>
-                  <span className="text-xs font-mono text-[#1A1816] font-semibold">
-                    ₹13,499 + GST
-                  </span>
-                </div>
-                <div className="font-serif text-lg font-medium text-[#1A1816]">
-                  Full 50+ Prompt AI Visibility Audit
-                </div>
-                <p className="text-xs text-[#57534E] leading-relaxed">
-                  50+ prompts across ChatGPT, Gemini, Perplexity, and AI
-                  Overviews · Benchmark comparison with 3 rivals · Technical SEO
-                  and schema code review · Google Business Profile deep dive ·
-                  Prioritized 90-day fix roadmap.{" "}
-                  <strong>Fee credited in full if you sign a 6-month retainer.</strong>
-                </p>
               </div>
             </div>
           </div>

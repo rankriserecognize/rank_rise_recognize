@@ -1,227 +1,242 @@
 import Link from "next/link";
-import { ArrowUpRight, Mail, Phone, MapPin, Clock, MessageSquare } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, MessageSquare } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#141311] text-[#EFEBE4] border-t border-[#292524] pt-16 pb-12">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 pb-14 border-b border-[#292524]">
-          {/* Column 1: Brand & Promise (4 cols) */}
-          <div className="lg:col-span-4 space-y-4">
+    <footer className="bg-[#e5e7eb] text-[#202020] border-t-2 border-[#000000] pt-16 pb-12 font-sans">
+      <div className="max-w-[1200px] mx-auto px-5 sm:px-8 space-y-12">
+        {/* Top Brand & Mission Card (Sticker Card with Oat Cream) */}
+        <div className="oat-feature-card p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-xl">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-xs bg-[#FAF7F2] text-[#141311] flex items-center justify-center font-serif text-sm font-semibold border border-[#9C7D38]">
-                R
+              <div className="w-10 h-10 rounded-full bg-[#ffffff] border-2 border-[#000000] flex items-center justify-center overflow-hidden shrink-0">
+                <img
+                  src="/LOGO.jpeg"
+                  alt="Rank Rise Recognize"
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <span className="font-serif text-xl font-medium tracking-tight text-[#FAF7F2]">
+              <span className="font-display text-[26px] text-[#202020] leading-none">
                 Rank Rise Recognize
               </span>
             </div>
-
-            <p className="font-serif text-base text-[#D6CFBE] italic leading-snug pt-1">
-              &ldquo;Rank on Google. Rise in revenue. Get recognised by AI.&rdquo;
+            <p className="text-[16px] text-[#202020] leading-relaxed font-medium">
+              Rank on Google. Rise in revenue. Get recognised by ChatGPT, Gemini & Perplexity.
             </p>
-
-            <p className="text-xs text-[#A8A29E] leading-relaxed max-w-sm">
-              The search + answer engine optimization agency built for growing
-              Indian SMBs and D2C brands. We optimize for search engines, map packs,
-              and generative AI models.
+            <p className="text-[14px] text-[#202020]/75">
+              The search and generative answer engine optimization agency built for growing Indian SMBs and D2C brands.
             </p>
-
-            <div className="pt-2 flex items-center gap-3">
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-xs border border-[#3E3832] flex items-center justify-center text-xs font-mono text-[#D6CFBE] hover:border-[#9C7D38] hover:text-[#FAF7F2] transition-colors"
-                aria-label="LinkedIn"
-              >
-                In
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-xs border border-[#3E3832] flex items-center justify-center text-xs font-mono text-[#D6CFBE] hover:border-[#9C7D38] hover:text-[#FAF7F2] transition-colors"
-                aria-label="Instagram"
-              >
-                Ig
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-8 h-8 rounded-xs border border-[#3E3832] flex items-center justify-center text-xs font-mono text-[#D6CFBE] hover:border-[#9C7D38] hover:text-[#FAF7F2] transition-colors"
-                aria-label="YouTube"
-              >
-                Yt
-              </a>
-            </div>
           </div>
 
-          {/* Column 2: Search & Growth Services (3 cols) */}
-          <div className="lg:col-span-3 space-y-3">
-            <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
-              Services
-            </div>
-            <ul className="space-y-2 text-xs text-[#D6CFBE]">
+          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+            <Link
+              href="/ai-visibility-audit"
+              className="btn-kofi-primary text-[15px]"
+            >
+              Get Free AI Audit
+            </Link>
+            <a
+              href="https://wa.me/919490067869"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-kofi-outline text-[15px]"
+            >
+              WhatsApp Us
+            </a>
+          </div>
+        </div>
+
+        {/* Directory Navigation Links */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-4 border-b-2 border-[#000000]/15 text-[15px]">
+          {/* Column 1: Capabilities */}
+          <div className="space-y-3">
+            <h3 className="font-display text-[18px] text-[#202020]">
+              Capabilities
+            </h3>
+            <ul className="space-y-2 text-[#202020]/80 font-medium text-[14px]">
               <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
+                <Link href="/#services" className="hover:text-[#000000] hover:underline transition-colors">
                   SEO Services India
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
+                <Link href="/#services" className="hover:text-[#000000] hover:underline transition-colors">
                   AEO (Answer Engine Optimization)
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
+                <Link href="/#services" className="hover:text-[#000000] hover:underline transition-colors">
                   GEO (Generative Engine Optimization)
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
-                  Local SEO & Google Business Profile
+                <Link href="/#services" className="hover:text-[#000000] hover:underline transition-colors">
+                  Local SEO & Maps 3-Pack
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
+                <Link href="/#services" className="hover:text-[#000000] hover:underline transition-colors">
                   Content & Strategic Blogs
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
-                  Social Media Management
+                <Link href="/#services" className="hover:text-[#000000] hover:underline transition-colors">
+                  Social Media Strategy
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
-                  Google Ads & Meta Performance Ads
-                </Link>
-              </li>
-              <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
-                  SEO-Ready Website Development
-                </Link>
-              </li>
-              <li>
-                <Link href="/#services" className="hover:text-[#FAF7F2] transition-colors">
-                  Website Maintenance & Speed
+                <Link href="/#services" className="hover:text-[#000000] hover:underline transition-colors">
+                  Google & Meta Performance Ads
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Company (2 cols) */}
-          <div className="lg:col-span-2 space-y-3">
-            <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
+          {/* Column 2: Packages & Pricing */}
+          <div className="space-y-3">
+            <h3 className="font-display text-[18px] text-[#202020]">
+              Pricing & Tiers
+            </h3>
+            <ul className="space-y-2 text-[#202020]/80 font-medium text-[14px]">
+              <li>
+                <Link href="/#pricing" className="hover:text-[#000000] hover:underline transition-colors">
+                  Founding Launch Offer (From ₹7,999)
+                </Link>
+              </li>
+              <li>
+                <Link href="/#pricing" className="hover:text-[#000000] hover:underline transition-colors">
+                  Starter Package (₹22,499)
+                </Link>
+              </li>
+              <li>
+                <Link href="/#pricing" className="hover:text-[#000000] hover:underline transition-colors">
+                  Growth Package (₹49,499)
+                </Link>
+              </li>
+              <li>
+                <Link href="/#pricing" className="hover:text-[#000000] hover:underline transition-colors">
+                  AI Search Pro (₹53,999)
+                </Link>
+              </li>
+              <li>
+                <Link href="/#pricing" className="hover:text-[#000000] hover:underline transition-colors">
+                  Category Leader (₹1,12,499)
+                </Link>
+              </li>
+              <li>
+                <Link href="/ai-visibility-audit" className="font-semibold text-[#000000] hover:underline transition-colors">
+                  Free 10-Prompt AI Check →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Company */}
+          <div className="space-y-3">
+            <h3 className="font-display text-[18px] text-[#202020]">
               Company
-            </div>
-            <ul className="space-y-2 text-xs text-[#D6CFBE]">
+            </h3>
+            <ul className="space-y-2 text-[#202020]/80 font-medium text-[14px]">
               <li>
-                <Link href="/#about" className="hover:text-[#FAF7F2] transition-colors">
-                  About Us
+                <Link href="/#about" className="hover:text-[#000000] hover:underline transition-colors">
+                  About Rank Rise Recognize
                 </Link>
               </li>
               <li>
-                <Link href="/#pricing" className="hover:text-[#FAF7F2] transition-colors">
-                  Transparent Pricing
+                <Link href="/#results" className="hover:text-[#000000] hover:underline transition-colors">
+                  Verified Case Studies
                 </Link>
               </li>
               <li>
-                <Link href="/#results" className="hover:text-[#FAF7F2] transition-colors">
-                  Results & Case Studies
+                <Link href="/#industries" className="hover:text-[#000000] hover:underline transition-colors">
+                  Industries We Specialize In
                 </Link>
               </li>
               <li>
-                <Link href="/#industries" className="hover:text-[#FAF7F2] transition-colors">
-                  Industries Served
+                <Link href="/#blog" className="hover:text-[#000000] hover:underline transition-colors">
+                  Search & AI Research
                 </Link>
               </li>
               <li>
-                <Link href="/#blog" className="hover:text-[#FAF7F2] transition-colors">
-                  Search & AI Blog
+                <Link href="/#faq" className="hover:text-[#000000] hover:underline transition-colors">
+                  Frequently Asked Questions
                 </Link>
               </li>
               <li>
-                <Link href="/#faq" className="hover:text-[#FAF7F2] transition-colors">
-                  SEO & GEO FAQs
-                </Link>
-              </li>
-              <li>
-                <Link href="/#contact" className="hover:text-[#FAF7F2] transition-colors">
-                  Contact Agency
+                <Link href="/#contact" className="hover:text-[#000000] hover:underline transition-colors">
+                  Contact Strategists
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Contact & Office (3 cols) */}
-          <div className="lg:col-span-3 space-y-3">
-            <div className="text-[11px] font-mono uppercase tracking-widest text-[#9C7D38] font-semibold">
-              Contact & Location
-            </div>
-
-            <div className="space-y-2.5 text-xs text-[#A8A29E]">
-              <div className="flex items-start gap-2.5">
-                <MapPin size={14} className="text-[#9C7D38] shrink-0 mt-0.5" />
-                <span>
-                  Indiranagar / Bengaluru & Pan-India Virtual Delivery
-                </span>
+          {/* Column 4: Location & Contact */}
+          <div className="space-y-3">
+            <h3 className="font-display text-[18px] text-[#202020]">
+              Headquarters
+            </h3>
+            <div className="space-y-2 text-[14px] text-[#202020]/85 font-medium">
+              <div className="flex items-start gap-2">
+                <MapPin size={16} className="text-[#202020] shrink-0 mt-0.5" />
+                <span>Amaravathi, Hosapete, Viajayanagar - 583201</span>
               </div>
-
-              <div className="flex items-center gap-2.5">
-                <Phone size={14} className="text-[#9C7D38] shrink-0" />
-                <a href="tel:+919876543210" className="hover:text-[#FAF7F2] transition-colors">
-                  +91 [Phone on File]
+              <div className="flex items-center gap-2">
+                <Phone size={16} className="text-[#202020] shrink-0" />
+                <a href="tel:+919490067869" className="hover:underline font-bold">
+                  +91 94900 67869
                 </a>
               </div>
-
-              <div className="flex items-center gap-2.5">
-                <Mail size={14} className="text-[#9C7D38] shrink-0" />
-                <a href="mailto:contact@rankriserecognize.com" className="hover:text-[#FAF7F2] transition-colors">
-                  contact@rankriserecognize.com
+              <div className="flex items-center gap-2">
+                <Mail size={16} className="text-[#202020] shrink-0" />
+                <a href="mailto:rankriserecognize@gmail.com" className="hover:underline">
+                  rankriserecognize@gmail.com
                 </a>
               </div>
-
-              <div className="flex items-center gap-2.5">
-                <MessageSquare size={14} className="text-[#9C7D38] shrink-0" />
+              <div className="flex items-center gap-2">
+                <MessageSquare size={16} className="text-[#202020] shrink-0" />
                 <a
-                  href="https://wa.me/919876543210"
+                  href="https://wa.me/919490067869"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[#FAF7F2] transition-colors text-[#D4AF37]"
+                  className="font-bold underline text-[#202020]"
                 >
-                  WhatsApp Click-to-Chat
+                  WhatsApp Fast Response
                 </a>
               </div>
-
-              <div className="flex items-center gap-2.5 pt-1 text-[11px] text-[#78716C]">
+              <div className="flex items-center gap-2 pt-1 text-[12px] text-[#202020]/70">
                 <Clock size={13} className="shrink-0" />
-                <span>Mon–Sat, 10:00 AM – 7:00 PM IST</span>
+                <span>Mon–Sat: 10:00 AM – 7:00 PM IST</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Legal Policies */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11.5px] text-[#78716C]">
+        {/* Legal & Copyright Strip */}
+        <div className="pt-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-[13px] text-[#202020]/75 font-medium">
           <div>
-            © 2026 Rank Rise Recognize. All rights reserved.
+            Copyright © 2026 Rank Rise Recognize. All rights reserved.
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-            <Link href="/privacy-policy" className="hover:text-[#D6CFBE] transition-colors">
+          <div className="flex flex-wrap items-center gap-4">
+            <Link href="/privacy-policy" className="hover:underline">
               Privacy Policy
             </Link>
-            <span className="text-[#3E3832]">·</span>
-            <Link href="/terms-of-service" className="hover:text-[#D6CFBE] transition-colors">
-              Terms of Service
+            <span>•</span>
+            <Link href="/terms-of-service" className="hover:underline">
+              Terms of Use
             </Link>
-            <span className="text-[#3E3832]">·</span>
-            <Link href="/refund-policy" className="hover:text-[#D6CFBE] transition-colors">
-              Refund & Cancellation Policy
+            <span>•</span>
+            <Link href="/refund-policy" className="hover:underline">
+              Sales & Refunds
             </Link>
+            <span>•</span>
+            <Link href="/sitemap.xml" className="hover:underline">
+              Sitemap
+            </Link>
+          </div>
+
+          <div className="text-[12px] font-bold text-[#202020]">
+            Crafted for India SMBs & D2C Brands
           </div>
         </div>
       </div>

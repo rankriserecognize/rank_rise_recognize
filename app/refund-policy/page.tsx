@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RefreshCcw } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -9,22 +10,26 @@ export const metadata: Metadata = {
 
 export default function RefundPolicyPage() {
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col">
+    <div className="min-h-screen bg-[#e5e7eb] text-[#202020] flex flex-col font-sans selection:bg-[#aac9f7]">
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 space-y-8">
-          <div className="space-y-2">
-            <h1 className="font-serif text-3xl sm:text-4xl font-medium text-[#1A1816]">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[2px] border-black text-[13px] font-bold text-[#202020]">
+              <RefreshCcw size={15} className="text-[#202020]" />
+              <span>COMMERCIAL TERMS</span>
+            </div>
+            <h1 className="font-display text-[44px] sm:text-[60px] text-[#202020] leading-none tracking-normal">
               Refund & Cancellation Policy
             </h1>
-            <p className="text-xs font-mono text-[#78716C]">
+            <p className="text-[13px] font-semibold text-[#202020]/60">
               Last updated: October 2026 · Rank Rise Recognize
             </p>
           </div>
 
-          <div className="space-y-6 text-sm text-[#57534E] leading-relaxed">
-            <h2 className="font-serif text-xl font-medium text-[#1A1816]">
+          <div className="sticker-card p-8 sm:p-12 space-y-6 text-[15px] text-[#202020]/80 leading-relaxed bg-white rounded-[40px] border-[2.5px] border-black">
+            <h2 className="font-display text-[22px] text-[#202020]">
               1. Monthly Retainer Services
             </h2>
             <p>
@@ -35,7 +40,7 @@ export default function RefundPolicyPage() {
               at any time with 30 days notice before the next invoice.
             </p>
 
-            <h2 className="font-serif text-xl font-medium text-[#1A1816]">
+            <h2 className="font-display text-[22px] text-[#202020]">
               2. Audit Crediting Policy
             </h2>
             <p>
@@ -45,17 +50,17 @@ export default function RefundPolicyPage() {
               invoice.
             </p>
 
-            <h2 className="font-serif text-xl font-medium text-[#1A1816]">
-              3. Questions
+            <h2 className="font-display text-[22px] text-[#202020]">
+              3. Inquiries
             </h2>
             <p>
               If you have any questions or billing concerns, please contact our
               team directly at{" "}
               <a
-                href="mailto:contact@rankriserecognize.com"
-                className="text-[#9C7D38] underline"
+                href="mailto:rankriserecognize@gmail.com"
+                className="text-[#202020] font-bold underline hover:text-[#72a4f2] transition-colors"
               >
-                contact@rankriserecognize.com
+                rankriserecognize@gmail.com
               </a>
               .
             </p>

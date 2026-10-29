@@ -5,7 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, ContactShadows } from "@react-three/drei";
 import * as THREE from "three";
 
-// Individual Architectural Ascending Step
+// Individual Tactile Oat-Cream Stepped Plinth
 function SpiralStep({
   index,
   total,
@@ -22,47 +22,47 @@ function SpiralStep({
   const z = Math.sin(angle) * (radius + index * 0.08);
   const y = (index - total / 2) * stepHeight;
 
-  // Materials: Alabaster Stone + Inlaid Antique Bronze Edge
-  const stoneMaterial = useMemo(
+  // Materials: Warm Oat-Cream Ceramic + Ink Black Bevel Outline
+  const oatCreamMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#F3EEE6"),
-        roughness: 0.38,
-        metalness: 0.06,
+        color: new THREE.Color("#e9dfd2"),
+        roughness: 0.35,
+        metalness: 0.15,
       }),
     []
   );
 
-  const bronzeInlay = useMemo(
+  const inkEdgeMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#C5A458"),
-        roughness: 0.22,
-        metalness: 0.88,
+        color: new THREE.Color("#202020"),
+        roughness: 0.5,
+        metalness: 0.1,
       }),
     []
   );
 
   return (
     <group position={[x, y, z]} rotation={[0, -angle + Math.PI / 2, 0]}>
-      {/* Stone Plinth Step */}
-      <mesh material={stoneMaterial} castShadow receiveShadow>
-        <boxGeometry args={[1.1, stepHeight * 0.85, 0.45]} />
+      {/* Warm Oat Ceramic Plinth */}
+      <mesh material={oatCreamMaterial} castShadow receiveShadow>
+        <boxGeometry args={[1.15, stepHeight * 0.85, 0.48]} />
       </mesh>
 
-      {/* Muted Antique Gold Trim Inlay */}
+      {/* Tactile Ink Edge Inlay */}
       <mesh
-        material={bronzeInlay}
-        position={[0, stepHeight * 0.43, 0.22]}
+        material={inkEdgeMaterial}
+        position={[0, stepHeight * 0.43, 0.235]}
         castShadow
       >
-        <boxGeometry args={[1.12, 0.02, 0.03]} />
+        <boxGeometry args={[1.16, 0.02, 0.025]} />
       </mesh>
     </group>
   );
 }
 
-// Sculptural Composition: Ascending Spiral + Dual Recognition Rings + Apex Monolith
+// Ko-fi Warm Tactile Sculpture: Interactive Growth Steps + Cobalt Pop Ring
 function SculptureContent() {
   const groupRef = useRef<THREE.Group>(null);
   const ringRef = useRef<THREE.Mesh>(null);
@@ -71,88 +71,92 @@ function SculptureContent() {
 
   const stepsCount = 9;
 
-  // Antique Gold / Bronze Ring Material
-  const goldRingMaterial = useMemo(
+  // Signature Cobalt Pop Accent Ring (#72a4f2)
+  const cobaltRingMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#C9A658"),
-        metalness: 0.92,
-        roughness: 0.2,
+        color: new THREE.Color("#72a4f2"),
+        roughness: 0.25,
+        metalness: 0.35,
+        emissive: new THREE.Color("#2d4a7a"),
+        emissiveIntensity: 0.15,
       }),
     []
   );
 
-  const bronzeRingMaterial = useMemo(
+  // Ink Black Outline Meridian Ring (#202020)
+  const inkRingMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#9C7D38"),
-        metalness: 0.85,
-        roughness: 0.28,
+        color: new THREE.Color("#202020"),
+        roughness: 0.4,
+        metalness: 0.2,
       }),
     []
   );
 
+  // Apex Cobalt Pop Marker
   const apexMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#E2C682"),
-        metalness: 0.75,
-        roughness: 0.18,
+        color: new THREE.Color("#72a4f2"),
+        roughness: 0.2,
+        metalness: 0.4,
+        emissive: new THREE.Color("#355a96"),
+        emissiveIntensity: 0.25,
       }),
     []
   );
 
   useFrame((state, delta) => {
-    // Smooth pointer damping
     if (groupRef.current) {
-      const targetRotationY = state.pointer.x * 0.4;
-      const targetRotationX = -state.pointer.y * 0.25;
+      const targetRotationY = state.pointer.x * 0.45;
+      const targetRotationX = -state.pointer.y * 0.22;
 
       groupRef.current.rotation.y = THREE.MathUtils.damp(
         groupRef.current.rotation.y,
-        targetRotationY + state.clock.getElapsedTime() * 0.12,
+        targetRotationY + state.clock.getElapsedTime() * 0.14,
         2.5,
         delta
       );
 
       groupRef.current.rotation.x = THREE.MathUtils.damp(
         groupRef.current.rotation.x,
-        targetRotationX + 0.15,
+        targetRotationX + 0.12,
         2.5,
         delta
       );
     }
 
-    // Elegant secondary rotations
     if (ringRef.current) {
-      ringRef.current.rotation.z += delta * 0.18;
+      ringRef.current.rotation.z += delta * 0.2;
       ringRef.current.rotation.x += delta * 0.08;
     }
 
     if (ring2Ref.current) {
-      ring2Ref.current.rotation.y -= delta * 0.14;
-      ring2Ref.current.rotation.z -= delta * 0.06;
+      ring2Ref.current.rotation.y -= delta * 0.15;
+      ring2Ref.current.rotation.z -= delta * 0.07;
     }
 
     if (apexRef.current) {
-      apexRef.current.rotation.y += delta * 0.25;
-      apexRef.current.rotation.x += delta * 0.15;
+      apexRef.current.rotation.y += delta * 0.3;
+      apexRef.current.rotation.x += delta * 0.18;
     }
   });
 
   return (
-    <group ref={groupRef} position={[0, -0.1, 0]}>
-      {/* Central Axis Core: Column of Authority */}
-      <mesh position={[0, -0.1, 0]} receiveShadow>
-        <cylinderGeometry args={[0.18, 0.25, 2.8, 32]} />
+    <group ref={groupRef} position={[0, -0.05, 0]}>
+      {/* Central Ink Axis Core */}
+      <mesh position={[0, -0.05, 0]} receiveShadow>
+        <cylinderGeometry args={[0.16, 0.22, 2.7, 32]} />
         <meshStandardMaterial
-          color="#ECE6DC"
+          color="#202020"
           roughness={0.4}
-          metalness={0.1}
+          metalness={0.2}
         />
       </mesh>
 
-      {/* 9 Ascending Steps: Representing Rank & Rise */}
+      {/* 9 Ascending Plinths */}
       {Array.from({ length: stepsCount }).map((_, i) => (
         <SpiralStep
           key={i}
@@ -163,37 +167,37 @@ function SculptureContent() {
         />
       ))}
 
-      {/* Primary Recognition Orbit Ring: AI Citations (ChatGPT/Gemini/Overviews) */}
+      {/* Primary Cobalt Pop Accent Ring */}
       <mesh
         ref={ringRef}
-        material={goldRingMaterial}
+        material={cobaltRingMaterial}
         position={[0, 0.1, 0]}
-        rotation={[Math.PI / 3.5, 0.4, 0]}
+        rotation={[Math.PI / 3.4, 0.35, 0]}
         castShadow
       >
-        <torusGeometry args={[1.85, 0.035, 24, 80]} />
+        <torusGeometry args={[1.88, 0.034, 24, 80]} />
       </mesh>
 
-      {/* Secondary Orbital Meridian Ring */}
+      {/* Secondary Ink Black Meridian Ring */}
       <mesh
         ref={ring2Ref}
-        material={bronzeRingMaterial}
+        material={inkRingMaterial}
         position={[0, 0.1, 0]}
-        rotation={[-Math.PI / 4, -0.5, 0.3]}
+        rotation={[-Math.PI / 4, -0.45, 0.25]}
         castShadow
       >
-        <torusGeometry args={[1.5, 0.022, 20, 72]} />
+        <torusGeometry args={[1.52, 0.022, 20, 72]} />
       </mesh>
 
-      {/* Floating Apex Zenith Monolith (Prism of Visibility) */}
-      <Float speed={2.5} rotationIntensity={0.4} floatIntensity={0.6}>
+      {/* Floating Zenith Octahedron */}
+      <Float speed={2.4} rotationIntensity={0.35} floatIntensity={0.5}>
         <mesh
           ref={apexRef}
           material={apexMaterial}
           position={[0, 1.45, 0]}
           castShadow
         >
-          <octahedronGeometry args={[0.3, 0]} />
+          <octahedronGeometry args={[0.32, 0]} />
         </mesh>
       </Float>
     </group>
@@ -202,9 +206,9 @@ function SculptureContent() {
 
 export default function HeroSculpture() {
   return (
-    <div className="w-full h-full min-h-[380px] sm:min-h-[460px] lg:min-h-[560px] relative select-none">
+    <div className="w-full h-full min-h-[360px] sm:min-h-[440px] lg:min-h-[520px] relative select-none">
       <Canvas
-        camera={{ position: [0, 1.2, 4.2], fov: 42 }}
+        camera={{ position: [0, 1.1, 4.4], fov: 38 }}
         shadows
         gl={{
           antialias: true,
@@ -213,40 +217,36 @@ export default function HeroSculpture() {
         }}
         dpr={[1, 1.8]}
       >
-        {/* Warm Classical Studio Lighting */}
-        <ambientLight intensity={1.1} color="#FAF6EE" />
+        {/* Warm Studio Light */}
+        <ambientLight intensity={1.3} color="#fbf7f0" />
 
-        {/* Key Warm Sunlight / Tungsten Studio Light */}
+        {/* Key Directional Sunlight */}
         <directionalLight
-          position={[4.5, 7, 4]}
-          intensity={2.4}
-          color="#FFF2DC"
+          position={[5, 8, 5]}
+          intensity={2.2}
+          color="#ffffff"
           castShadow
           shadow-mapSize={[1024, 1024]}
-          shadow-bias={-0.0001}
         />
 
-        {/* Antique Bronze Rim Light */}
+        {/* Soft Cobalt Tint Fill Light */}
         <directionalLight
-          position={[-4.5, 3.5, -3.5]}
-          intensity={1.6}
-          color="#D4AF57"
+          position={[-6, 4, -4]}
+          intensity={1.2}
+          color="#aac9f7"
         />
 
-        {/* Soft Under-fill for Sculptural Depth */}
-        <pointLight position={[0, -2, 2]} intensity={0.5} color="#FAF7F2" />
-
-        {/* The 3D Composition */}
+        {/* 3D Composition */}
         <SculptureContent />
 
-        {/* Realistic Ambient Contact Shadow on Ivory Ground */}
+        {/* Flat Sticker Contact Ground */}
         <ContactShadows
           position={[0, -1.5, 0]}
           opacity={0.4}
-          scale={8}
-          blur={2.4}
-          far={4}
-          color="#524434"
+          scale={7}
+          blur={2.2}
+          far={3.5}
+          color="#000000"
         />
       </Canvas>
     </div>

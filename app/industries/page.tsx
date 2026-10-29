@@ -7,8 +7,8 @@ import {
   Home,
   UtensilsCrossed,
   Building2,
+  ChevronRight,
   Sparkles,
-  ArrowRight,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -66,20 +66,21 @@ export default function IndustriesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col">
+    <div className="min-h-screen bg-[#e5e7eb] text-[#202020] flex flex-col font-sans selection:bg-[#aac9f7]">
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 space-y-16">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-8 space-y-16">
           {/* Header */}
           <section className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F4EFEA] border border-[#E0D8CB] rounded-xs text-[11px] font-mono uppercase tracking-widest text-[#786339] font-medium">
-              Industry Playbooks
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[2px] border-black text-[13px] font-bold text-[#202020]">
+              <Sparkles size={15} className="text-[#202020]" />
+              <span>INDUSTRY PLAYBOOKS</span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-5xl text-[#1A1816] font-medium tracking-tight">
-              SEO and AI search built for your industry
+            <h1 className="font-display text-[44px] sm:text-[60px] text-[#202020] leading-none tracking-normal">
+              SEO and AI search built for your industry.
             </h1>
-            <p className="text-base sm:text-lg text-[#57534E] leading-relaxed">
+            <p className="text-[17px] text-[#202020]/80 leading-relaxed font-normal">
               Every market sector has different search behavior. A clinic needs
               local map dominance; a D2C brand needs AI model recommendation; a
               real estate developer needs locality authority. We architect custom
@@ -94,38 +95,58 @@ export default function IndustriesPage() {
               return (
                 <div
                   key={idx}
-                  className="classic-card p-8 rounded-xs space-y-4 flex flex-col justify-between"
+                  className="sticker-card p-8 space-y-5 flex flex-col justify-between bg-white rounded-[40px] border-[2.5px] border-black"
                 >
                   <div className="space-y-4">
-                    <div className="w-12 h-12 rounded-xs bg-[#FAF7F2] border border-[#E8E2D6] flex items-center justify-center text-[#9C7D38]">
-                      <Icon size={22} />
+                    <div className="w-12 h-12 rounded-full bg-[#e9dfd2] border-[2px] border-black flex items-center justify-center text-[#202020]">
+                      <Icon size={20} />
                     </div>
-
-                    <h2 className="font-serif text-2xl font-medium text-[#1A1816]">
-                      {ind.name}
-                    </h2>
-
-                    <div className="text-xs font-mono text-[#84682A]">
-                      {ind.headline}
+                    <div>
+                      <h3 className="font-display text-[22px] text-[#202020]">
+                        {ind.name}
+                      </h3>
+                      <p className="text-[14px] text-[#202020] font-semibold mt-1">
+                        {ind.headline}
+                      </p>
                     </div>
-
-                    <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed pt-2 border-t border-[#F4EFEA]">
+                    <p className="text-[14px] text-[#202020]/80 leading-relaxed pt-2 border-t border-black/10">
                       {ind.focus}
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-[#F4EFEA]">
+                  <div className="pt-4 border-t border-black/10">
                     <Link
-                      href="/ai-visibility-audit"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9C7D38] hover:text-[#84682A]"
+                      href="/#pricing"
+                      className="inline-flex items-center gap-1.5 text-[14px] font-bold text-[#202020] hover:text-[#72a4f2] transition-colors"
                     >
-                      <span>Get industry visibility audit</span>
-                      <ArrowRight size={13} />
+                      <span>Explore suitable packages</span>
+                      <ChevronRight size={16} />
                     </Link>
                   </div>
                 </div>
               );
             })}
+          </section>
+
+          {/* CTA Box */}
+          <section className="oat-feature-card p-8 sm:p-12 text-center space-y-5 rounded-[40px] border-[2.5px] border-black bg-[#e9dfd2]">
+            <h2 className="font-display text-[28px] sm:text-[38px] text-[#202020] leading-tight">
+              Don&apos;t see your industry listed?
+            </h2>
+            <p className="text-[16px] text-[#202020]/80 max-w-lg mx-auto leading-relaxed">
+              Our entity architecture and search frameworks apply to any business
+              where buyers search Google or prompt AI. Request a free diagnostic
+              and we&apos;ll benchmark your exact sector.
+            </p>
+            <div className="pt-2">
+              <Link
+                href="/ai-visibility-audit"
+                className="pill-btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold"
+              >
+                <span>Request Free Industry Check</span>
+                <ChevronRight size={16} />
+              </Link>
+            </div>
           </section>
         </div>
       </main>

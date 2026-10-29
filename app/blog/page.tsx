@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Sparkles, ArrowRight, BookOpen } from "lucide-react";
+import { ChevronRight, BookOpen } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -95,19 +95,20 @@ export default function BlogHubPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col">
+    <div className="min-h-screen bg-[#e5e7eb] text-[#202020] flex flex-col font-sans selection:bg-[#aac9f7]">
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 space-y-14">
+        <div className="max-w-[1200px] mx-auto px-5 sm:px-8 space-y-16">
           <section className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F4EFEA] border border-[#E0D8CB] rounded-xs text-[11px] font-mono uppercase tracking-widest text-[#786339] font-medium">
-              Editorial & Research
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[2px] border-black text-[13px] font-bold text-[#202020]">
+              <BookOpen size={15} className="text-[#202020]" />
+              <span>EDITORIAL RESEARCH</span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-5xl text-[#1A1816] font-medium tracking-tight">
-              SEO, AEO & GEO Intelligence
+            <h1 className="font-display text-[44px] sm:text-[60px] text-[#202020] leading-none tracking-normal">
+              SEO, AEO & GEO Intelligence.
             </h1>
-            <p className="text-base sm:text-lg text-[#57534E] leading-relaxed">
+            <p className="text-[17px] text-[#202020]/80 leading-relaxed font-normal">
               Research-led articles written for humans, search engines, and AI
               models. Practical frameworks from our active client experiments.
             </p>
@@ -117,47 +118,49 @@ export default function BlogHubPage() {
             {articles.map((art) => (
               <div
                 key={art.id}
-                className="bg-[#FFFFFF] border border-[#E8E2D6] p-6 rounded-xs space-y-3 flex flex-col justify-between hover:border-[#9C7D38] transition-colors"
+                className="sticker-card p-7 space-y-4 flex flex-col justify-between bg-white rounded-[32px] border-[2.5px] border-black"
               >
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-[10px] font-mono uppercase">
-                    <span className="text-[#9C7D38] font-semibold">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="px-3 py-1 rounded-full bg-[#e9dfd2] border border-black font-bold text-[#202020] uppercase tracking-wider">
                       {art.category}
                     </span>
-                    <span className="text-[#78716C]">Article 0{art.id}</span>
+                    <span className="font-display text-[14px] text-[#202020]/50">
+                      #{art.id.toString().padStart(2, "0")}
+                    </span>
                   </div>
 
-                  <h2 className="font-serif text-xl font-medium text-[#1A1816] leading-snug">
+                  <h2 className="font-display text-[19px] sm:text-[21px] text-[#202020] hover:text-[#72a4f2] transition-colors cursor-pointer leading-snug">
                     {art.title}
                   </h2>
 
-                  <p className="text-xs text-[#57534E] leading-relaxed">
+                  <p className="text-[14px] text-[#202020]/80 leading-relaxed font-normal">
                     {art.excerpt}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-[#F4EFEA] text-[11px] font-mono text-[#78716C]">
-                  Target Keyword: {art.keyword}
+                <div className="pt-3 border-t border-black/10 text-[12px] font-semibold text-[#202020]/60">
+                  Topic: {art.keyword}
                 </div>
               </div>
             ))}
           </section>
 
-          <section className="p-8 bg-[#1A1816] text-[#FAF7F2] rounded-xs text-center space-y-4">
-            <h2 className="font-serif text-2xl font-medium">
+          <section className="oat-feature-card p-8 sm:p-12 text-center space-y-5 rounded-[40px] border-[2.5px] border-black bg-[#e9dfd2]">
+            <h2 className="font-display text-[28px] sm:text-[38px] text-[#202020] leading-tight">
               Want to see how your website scores against these standards?
             </h2>
-            <p className="text-xs sm:text-sm text-[#D6CFBE] max-w-md mx-auto">
+            <p className="text-[16px] text-[#202020]/80 max-w-md mx-auto leading-relaxed">
               Get our complimentary 10-prompt AI visibility check delivered to
               your WhatsApp in 3 working days.
             </p>
             <div className="pt-2">
               <Link
                 href="/ai-visibility-audit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold uppercase tracking-wider rounded-xs"
+                className="pill-btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold"
               >
-                <Sparkles size={14} className="text-[#9C7D38]" />
                 <span>Get Free AI Visibility Check</span>
+                <ChevronRight size={16} />
               </Link>
             </div>
           </section>

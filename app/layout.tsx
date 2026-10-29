@@ -1,23 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google";
+import { DM_Sans, Lilita_One } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
 });
 
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-jakarta",
+const lilitaOne = Lilita_One({
+  variable: "--font-bogue-black",
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: "400",
 });
 
 export const viewport: Viewport = {
-  themeColor: "#FAF7F2",
+  themeColor: "#e5e7eb",
   width: "device-width",
   initialScale: 1,
 };
@@ -72,6 +72,9 @@ export const metadata: Metadata = {
   },
 };
 
+import JsonLd from "./components/JsonLd";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
+
 export default function RootLayout({
   children,
 }: {
@@ -80,10 +83,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${jakarta.variable} scroll-smooth`}
+      className={`${dmSans.variable} ${lilitaOne.variable} scroll-smooth`}
     >
-      <body className="min-h-screen bg-[#FAF7F2] text-[#1A1816] font-sans antialiased selection:bg-[#9C7D38]/20 selection:text-[#1A1816]">
+      <body className="min-h-screen bg-[#e5e7eb] text-[#202020] font-sans antialiased selection:bg-[#aac9f7] selection:text-[#202020]">
+        <JsonLd />
         {children}
+        <FloatingWhatsApp />
       </body>
     </html>
   );

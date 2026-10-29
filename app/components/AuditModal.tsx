@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { X, CheckCircle2, Sparkles, Send, ShieldCheck, ArrowRight } from "lucide-react";
+import { X, CheckCircle2, Send, ShieldCheck, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface AuditModalProps {
   isOpen: boolean;
@@ -23,55 +24,64 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  if (!isOpen) return null;
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    // Simulate verification
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
-    }, 1200);
+    }, 1000);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-[#1A1816]/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div
-        className="relative w-full max-w-2xl bg-[#FAF7F2] border border-[#DFD7C8] rounded-sm shadow-2xl p-6 sm:p-8 my-8 text-[#1A1816] max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          onClick={onClose}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/50 backdrop-blur-xs"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 15 }}
+            transition={{ duration: 0.25, ease: [0.34, 1.56, 0.64, 1] }}
+            className="relative w-full max-w-2xl bg-[#ffffff] border-3 border-[#000000] rounded-[40px] p-6 sm:p-10 my-8 text-[#202020] max-h-[90vh] overflow-y-auto shadow-none"
+            onClick={(e) => e.stopPropagation()}
+          >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-xs text-[#78716C] hover:text-[#1A1816] hover:bg-[#EFE9DF] transition-colors"
+          className="absolute top-6 right-6 p-2 rounded-full border-2 border-[#000000] bg-[#e5e7eb] text-[#202020] hover:bg-[#e9dfd2] transition-colors"
           aria-label="Close modal"
         >
-          <X size={20} />
+          <X size={18} />
         </button>
 
         {!isSuccess ? (
           <div>
-            <div className="flex items-center gap-2 text-[#9C7D38] text-xs font-mono font-semibold uppercase tracking-wider mb-2">
-              <Sparkles size={14} />
-              <span>Free AI Visibility Audit (10 Prompts)</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e9dfd2] border-2 border-[#000000] text-[12px] font-bold text-[#202020] uppercase tracking-wider mb-3">
+              <Sparkles size={13} className="text-[#202020]" />
+              <span>COMPLIMENTARY AI SEARCH DIAGNOSTIC</span>
             </div>
 
-            <h2 className="font-serif text-2xl sm:text-3xl text-[#1A1816] font-medium tracking-tight mb-2">
+            <h2 className="font-display text-[28px] sm:text-[34px] text-[#202020] leading-tight mb-2">
               Does ChatGPT recommend your business, or your competitor?
             </h2>
 
-            <p className="text-sm text-[#57534E] leading-relaxed mb-6">
-              We&apos;ll ask ChatGPT, Gemini and Google 10 questions your actual
-              customers ask, and show you exactly who gets recommended.
-              Free. Delivered to your WhatsApp or inbox in 3 working days.
+            <p className="text-[15px] leading-relaxed text-[#202020]/80 mb-6 font-medium">
+              We&apos;ll test 10 realistic customer queries in ChatGPT, Gemini
+              and Google AI Overviews, benchmark who gets recommended, and deliver
+              your diagnostic in 3 working days.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1.5">
+                  <label className="block text-[13px] font-bold text-[#202020] mb-1">
                     Your Name *
                   </label>
                   <input
@@ -82,12 +92,12 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                       setFormData({ ...formData, name: e.target.value })
                     }
                     placeholder="e.g. Anand Budur"
-                    className="w-full px-3.5 py-2.5 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] placeholder-[#A8A29E] focus:outline-hidden focus:border-[#9C7D38]"
+                    className="w-full kofi-input"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1.5">
+                  <label className="block text-[13px] font-bold text-[#202020] mb-1">
                     Business Name *
                   </label>
                   <input
@@ -98,14 +108,14 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                       setFormData({ ...formData, businessName: e.target.value })
                     }
                     placeholder="e.g. Organic Heritage"
-                    className="w-full px-3.5 py-2.5 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] placeholder-[#A8A29E] focus:outline-hidden focus:border-[#9C7D38]"
+                    className="w-full kofi-input"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1.5">
+                  <label className="block text-[13px] font-bold text-[#202020] mb-1">
                     Website or GBP URL *
                   </label>
                   <input
@@ -116,12 +126,12 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                       setFormData({ ...formData, websiteUrl: e.target.value })
                     }
                     placeholder="https://yourbrand.com"
-                    className="w-full px-3.5 py-2.5 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] placeholder-[#A8A29E] focus:outline-hidden focus:border-[#9C7D38]"
+                    className="w-full kofi-input"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1.5">
+                  <label className="block text-[13px] font-bold text-[#202020] mb-1">
                     City / Target Location *
                   </label>
                   <input
@@ -132,14 +142,14 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                       setFormData({ ...formData, city: e.target.value })
                     }
                     placeholder="e.g. Bengaluru, Mumbai, Pan-India"
-                    className="w-full px-3.5 py-2.5 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] placeholder-[#A8A29E] focus:outline-hidden focus:border-[#9C7D38]"
+                    className="w-full kofi-input"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1.5">
+                  <label className="block text-[13px] font-bold text-[#202020] mb-1">
                     Industry *
                   </label>
                   <select
@@ -147,7 +157,7 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                     onChange={(e) =>
                       setFormData({ ...formData, industry: e.target.value })
                     }
-                    className="w-full px-3.5 py-2.5 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] focus:outline-hidden focus:border-[#9C7D38]"
+                    className="w-full kofi-input cursor-pointer"
                   >
                     <option value="D2C & E-Commerce">D2C & E-Commerce</option>
                     <option value="Clinics & Healthcare">Clinics & Healthcare</option>
@@ -160,7 +170,7 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1.5">
+                  <label className="block text-[13px] font-bold text-[#202020] mb-1">
                     WhatsApp Number *
                   </label>
                   <input
@@ -170,14 +180,14 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                     onChange={(e) =>
                       setFormData({ ...formData, whatsapp: e.target.value })
                     }
-                    placeholder="+91 98765 43210"
-                    className="w-full px-3.5 py-2.5 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] placeholder-[#A8A29E] focus:outline-hidden focus:border-[#9C7D38]"
+                    placeholder="+91 94900 67869"
+                    className="w-full kofi-input"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1.5">
+                <label className="block text-[13px] font-bold text-[#202020] mb-1">
                   Email Address *
                 </label>
                 <input
@@ -188,12 +198,12 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   placeholder="name@company.com"
-                  className="w-full px-3.5 py-2.5 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] placeholder-[#A8A29E] focus:outline-hidden focus:border-[#9C7D38]"
+                  className="w-full kofi-input"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#44403C] uppercase tracking-wider mb-1.5">
+                <label className="block text-[13px] font-bold text-[#202020] mb-1">
                   Top 2 Competitors (Optional)
                 </label>
                 <input
@@ -202,18 +212,15 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                   onChange={(e) =>
                     setFormData({ ...formData, competitors: e.target.value })
                   }
-                  placeholder="e.g. Brand A, Brand B"
-                  className="w-full px-3.5 py-2.5 bg-[#FFFFFF] border border-[#D5CBB9] rounded-xs text-sm text-[#1A1816] placeholder-[#A8A29E] focus:outline-hidden focus:border-[#9C7D38]"
+                  placeholder="e.g. Competitor A, Competitor B"
+                  className="w-full kofi-input"
                 />
               </div>
 
-              {/* Trust Callout */}
-              <div className="p-3.5 bg-[#F5EFE6] border border-[#E8E0D1] rounded-xs text-xs text-[#57534E] flex items-start gap-2.5">
-                <ShieldCheck size={16} className="text-[#9C7D38] shrink-0 mt-0.5" />
+              <div className="p-4 bg-[#e9dfd2] border-2 border-[#000000] rounded-[24px] text-[13px] text-[#202020] flex items-start gap-2.5">
+                <ShieldCheck size={18} className="text-[#202020] shrink-0 mt-0.5" />
                 <span>
-                  <strong>Strict zero-spam policy:</strong> We respect your privacy.
-                  Your details are solely used to run the 10-prompt audit and deliver
-                  your PDF breakdown.
+                  <strong>Strict privacy guarantee:</strong> We only test your 10 queries and deliver your diagnostic breakdown. No marketing spam or automated sales calls.
                 </span>
               </div>
 
@@ -221,59 +228,52 @@ export default function AuditModal({ isOpen, onClose }: AuditModalProps) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 px-6 bg-[#1A1816] text-[#FAF7F2] font-semibold text-sm rounded-xs border border-[#1A1816] hover:bg-[#2B2724] hover:border-[#9C7D38] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
+                  className="w-full py-4 btn-kofi-primary text-[16px] cursor-pointer disabled:opacity-60"
                 >
                   {isSubmitting ? (
-                    <span>Analyzing Prompts & Initializing...</span>
+                    <span>Queueing 10 Prompts...</span>
                   ) : (
                     <>
                       <span>Send My Free AI Visibility Check</span>
-                      <Send size={15} className="text-[#EADBB2]" />
+                      <Send size={16} className="ml-1" />
                     </>
                   )}
                 </button>
-                <p className="text-[11px] text-center text-[#78716C] mt-2 font-mono">
+                <p className="text-[12px] text-center text-[#202020]/70 mt-2 font-medium">
                   Delivered via WhatsApp or email within 3 working days.
                 </p>
               </div>
             </form>
           </div>
         ) : (
-          <div className="py-8 text-center space-y-4">
-            <div className="w-14 h-14 mx-auto rounded-full bg-[#F6EED8] border border-[#9C7D38] flex items-center justify-center text-[#9C7D38]">
-              <CheckCircle2 size={30} />
+          <div className="py-10 text-center space-y-4">
+            <div className="w-16 h-16 mx-auto rounded-full bg-[#aac9f7] border-3 border-[#000000] flex items-center justify-center text-[#202020]">
+              <CheckCircle2 size={34} />
             </div>
 
-            <h3 className="font-serif text-2xl font-medium text-[#1A1816]">
-              Audit Request Received
+            <h3 className="font-display text-[28px] text-[#202020]">
+              Audit Queued Successfully!
             </h3>
 
-            <p className="text-sm text-[#57534E] max-w-md mx-auto leading-relaxed">
-              Thank you, <strong>{formData.name}</strong>. Our search analysts have
-              queued <strong>{formData.businessName}</strong> for our 10-prompt AI
-              visibility test across ChatGPT, Gemini, and Google AI Overviews.
+            <p className="text-[15px] text-[#202020]/80 max-w-md mx-auto leading-relaxed">
+              We have queued <strong>{formData.businessName}</strong>. You will
+              receive your 10-prompt analysis report on WhatsApp or Email within 3
+              working days.
             </p>
-
-            <div className="p-4 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs text-left max-w-md mx-auto text-xs space-y-2 text-[#44403C]">
-              <div className="font-semibold text-[#1A1816] border-b border-[#E8E2D6] pb-1">
-                What happens next:
-              </div>
-              <div>• We test 10 realistic buying-intent queries in your category.</div>
-              <div>• We benchmark your citations against your top competitors.</div>
-              <div>• You receive your customized action report on WhatsApp/Email.</div>
-            </div>
 
             <div className="pt-4">
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 bg-[#1A1816] text-[#FAF7F2] text-xs font-semibold rounded-xs hover:bg-[#332F2B] transition-colors"
+                className="btn-kofi-dark px-8 py-3 text-[14px]"
               >
                 Done
               </button>
             </div>
           </div>
         )}
-      </div>
-    </div>
-  );
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
+);
 }

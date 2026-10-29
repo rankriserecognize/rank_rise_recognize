@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Check, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -45,20 +45,20 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col">
+    <div className="min-h-screen bg-[#e5e7eb] text-[#202020] flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24">
         {/* Header */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-16 text-center">
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8 mb-16 text-center">
           <div className="max-w-3xl mx-auto space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F4EFEA] border border-[#E0D8CB] rounded-xs text-[11px] font-mono uppercase tracking-widest text-[#786339] font-medium">
-              Transparent Agency Pricing
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ffffff] border-2 border-[#000000] text-[12px] font-bold text-[#202020] uppercase tracking-wider">
+              TRANSPARENT RATES
             </div>
-            <h1 className="font-serif text-4xl sm:text-5xl text-[#1A1816] font-medium tracking-tight">
+            <h1 className="text-display-hero">
               Simple, transparent pricing
             </h1>
-            <p className="text-base sm:text-lg text-[#57534E]">
+            <p className="text-[18px] text-[#202020]/80 font-normal">
               Every price is on this page. No &ldquo;call for a quote&rdquo;, no
               12-month lock-in. All prices are monthly and exclude 18% GST.
             </p>
@@ -66,16 +66,16 @@ export default function PricingPage() {
         </section>
 
         {/* Founding Offer Banner */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-12">
-          <div className="p-6 bg-[#F6EED8] border border-[#DFD0B0] rounded-xs flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="space-y-1 text-center md:text-left">
-              <span className="text-[10px] font-mono uppercase bg-[#FFFFFF] px-2.5 py-0.5 rounded-xs border border-[#D5CBB9] text-[#84682A] font-semibold">
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8 mb-12">
+          <div className="oat-feature-card p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-1.5 text-center md:text-left">
+              <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#ffffff] border-2 border-[#000000] text-[11px] font-bold uppercase tracking-wider text-[#202020]">
                 Founding Client Offer · 2 of 3 slots left
               </span>
-              <div className="font-serif text-xl font-medium text-[#1A1816]">
+              <div className="font-display text-[24px] text-[#202020]">
                 Launch pricing locked for 6 months
               </div>
-              <p className="text-xs text-[#57534E]">
+              <p className="text-[14px] text-[#202020]/80 font-medium">
                 In exchange for an honest testimonial, a Google review, and
                 permission to feature verified results in our case study series.
               </p>
@@ -83,7 +83,7 @@ export default function PricingPage() {
 
             <Link
               href="/ai-visibility-audit"
-              className="px-6 py-2.5 bg-[#1A1816] text-[#FAF7F2] text-xs font-semibold rounded-xs uppercase tracking-wider shrink-0"
+              className="btn-kofi-primary text-[14px] px-6 py-3 shrink-0"
             >
               Claim a founding slot
             </Link>
@@ -91,45 +91,47 @@ export default function PricingPage() {
         </section>
 
         {/* Founding Packages Grid */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-20">
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8 mb-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Launch Basic */}
-            <div className="classic-card p-8 rounded-xs space-y-6 flex flex-col justify-between">
+            <div className="sticker-card p-8 space-y-6 flex flex-col justify-between bg-white">
               <div className="space-y-4">
-                <div className="text-xs font-mono uppercase text-[#78716C]">
+                <div className="text-[12px] font-bold uppercase text-[#202020]/60">
                   Launch Basic
                 </div>
-                <div className="font-serif text-3xl font-semibold text-[#1A1816]">
-                  ₹7,999
-                  <span className="text-xs font-sans text-[#78716C]">/mo</span>
+                <div>
+                  <div className="font-display text-[36px] text-[#202020]">
+                    ₹7,999
+                    <span className="text-[14px] font-sans font-normal text-[#202020]/70">/mo</span>
+                  </div>
+                  <div className="text-[13px] text-[#202020]/70 font-medium mt-1">
+                    Best for: Single local clinic or store
+                  </div>
                 </div>
-                <p className="text-xs text-[#78716C]">
-                  Best for: One local shop or single practice
-                </p>
 
-                <ul className="space-y-2.5 text-xs text-[#44403C] pt-4 border-t border-[#F4EFEA]">
+                <ul className="space-y-2 text-[14px] text-[#202020]/80 pt-4 border-t-2 border-[#e5e7eb] font-medium">
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    Google Business Profile setup + weekly posts
+                    <Check size={16} className="text-[#000000]" />
+                    GBP setup + weekly updates
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    15 high-intent keywords tracked
+                    <Check size={16} className="text-[#000000]" />
+                    15 target keywords tracked
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    1 SEO / GEO blog (~1,200 words)
+                    <Check size={16} className="text-[#000000]" />
+                    1 research blog (~1,200 words)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    On-page SEO for Homepage + 2 pages
+                    <Check size={16} className="text-[#000000]" />
+                    On-page SEO (Homepage + 2 pages)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    2 directory / citation listings per month
+                    <Check size={16} className="text-[#000000]" />
+                    2 directory citations / month
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
+                    <Check size={16} className="text-[#000000]" />
                     Monthly performance report
                   </li>
                 </ul>
@@ -137,116 +139,114 @@ export default function PricingPage() {
 
               <Link
                 href="/ai-visibility-audit"
-                className="w-full py-3 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold rounded-xs border border-[#D5CBB9] text-center"
+                className="btn-kofi-outline w-full py-2.5 text-center text-[13px]"
               >
                 Start Basic
               </Link>
             </div>
 
             {/* Launch Plus */}
-            <div className="classic-card p-8 rounded-xs space-y-6 flex flex-col justify-between">
+            <div className="sticker-card p-8 space-y-6 flex flex-col justify-between bg-white">
               <div className="space-y-4">
-                <div className="text-xs font-mono uppercase text-[#78716C]">
+                <div className="text-[12px] font-bold uppercase text-[#202020]/60">
                   Launch Plus
                 </div>
-                <div className="font-serif text-3xl font-semibold text-[#1A1816]">
-                  ₹13,499
-                  <span className="text-xs font-sans text-[#78716C]">/mo</span>
+                <div>
+                  <div className="font-display text-[36px] text-[#202020]">
+                    ₹13,499
+                    <span className="text-[14px] font-sans font-normal text-[#202020]/70">/mo</span>
+                  </div>
+                  <div className="text-[13px] text-[#202020]/70 font-medium mt-1">
+                    Best for: Multi-service local businesses
+                  </div>
                 </div>
-                <p className="text-xs text-[#78716C]">
-                  Best for: Growing local business
-                </p>
 
-                <ul className="space-y-2.5 text-xs text-[#44403C] pt-4 border-t border-[#F4EFEA]">
+                <ul className="space-y-2 text-[14px] text-[#202020]/80 pt-4 border-t-2 border-[#e5e7eb] font-medium">
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    Google Business Profile setup + weekly posts
+                    <Check size={16} className="text-[#000000]" />
+                    GBP setup + weekly updates
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    20 keywords tracked
+                    <Check size={16} className="text-[#000000]" />
+                    20 target keywords tracked
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    3 SEO / GEO blogs (~1,200 words)
+                    <Check size={16} className="text-[#000000]" />
+                    3 research blogs (~1,200 words)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    On-page SEO for 5 key pages
+                    <Check size={16} className="text-[#000000]" />
+                    On-page SEO for 5 pages
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
+                    <Check size={16} className="text-[#000000]" />
                     8 social posts (IG + FB)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    Monthly report
+                    <Check size={16} className="text-[#000000]" />
+                    Monthly performance report
                   </li>
                 </ul>
               </div>
 
               <Link
                 href="/ai-visibility-audit"
-                className="w-full py-3 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold rounded-xs border border-[#D5CBB9] text-center"
+                className="btn-kofi-outline w-full py-2.5 text-center text-[13px]"
               >
                 Start Plus
               </Link>
             </div>
 
-            {/* Launch Pro — MOST CHOSEN */}
-            <div className="classic-card p-8 rounded-xs space-y-6 flex flex-col justify-between border-2 border-[#9C7D38] shadow-lg relative bg-[#FFFFFF]">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-[#9C7D38] text-[#FAF7F2] text-[10px] font-mono uppercase font-semibold tracking-wider rounded-xs">
+            {/* Launch Pro — MOST POPULAR */}
+            <div className="sticker-card p-8 space-y-6 flex flex-col justify-between border-3 border-[#000000] relative bg-white">
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#72a4f2] text-[#202020] text-[11px] font-bold rounded-full border-2 border-[#000000]">
                 Most Chosen
               </div>
 
               <div className="space-y-4">
-                <div className="text-xs font-mono uppercase text-[#9C7D38] font-semibold">
+                <div className="text-[12px] font-bold uppercase text-[#202020]">
                   Launch Pro
                 </div>
-                <div className="space-y-1">
-                  <div className="font-serif text-3xl font-semibold text-[#1A1816]">
+                <div>
+                  <div className="font-display text-[36px] text-[#202020]">
                     ₹14,999
-                    <span className="text-xs font-sans text-[#78716C]">/mo</span>
+                    <span className="text-[14px] font-sans font-normal text-[#202020]/70">/mo</span>
                   </div>
-                  <div className="text-xs text-[#78716C]">
-                    Best for: Local business or small D2C brand
+                  <div className="text-[13px] text-[#202020]/70 font-medium mt-1">
+                    Best for: Local business or D2C brand
                   </div>
-                  <div className="text-[11px] font-mono text-[#84682A]">
-                    Worth ₹35,998 at regular rates · Just ₹500/day
+                  <div className="text-[12px] font-bold text-[#202020] pt-1">
+                    Worth ₹35,998 regular · Just ₹500/day
                   </div>
                 </div>
 
-                <ul className="space-y-2.5 text-xs text-[#1A1816] pt-4 border-t border-[#F4EFEA] font-medium">
+                <ul className="space-y-2 text-[14px] text-[#202020] pt-4 border-t-2 border-[#e5e7eb] font-semibold">
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    Google Business Profile setup + weekly posts
+                    <Check size={16} className="text-[#000000]" />
+                    GBP setup + weekly updates
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    30 keywords tracked
+                    <Check size={16} className="text-[#000000]" />
+                    30 target keywords tracked
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    4 SEO / GEO blogs (~1,200 words)
+                    <Check size={16} className="text-[#000000]" />
+                    4 research blogs (~1,200 words)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    5 key pages + FAQ Schema markup
+                    <Check size={16} className="text-[#000000]" />
+                    5 pages + FAQ Schema markup
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    25 AI prompts tracked (ChatGPT, Gemini, AI Overviews)
+                    <Check size={16} className="text-[#000000]" />
+                    25 AI prompts tracked (ChatGPT, Gemini)
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
+                    <Check size={16} className="text-[#000000]" />
                     12 social posts incl. 4 reels
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
-                    Free AI Visibility Audit (Worth ₹13,499)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check size={14} className="text-[#9C7D38]" />
+                    <Check size={16} className="text-[#000000]" />
                     Monthly report + 30-min strategy call
                   </li>
                 </ul>
@@ -254,7 +254,7 @@ export default function PricingPage() {
 
               <Link
                 href="/ai-visibility-audit"
-                className="w-full py-3.5 bg-[#1A1816] text-[#FAF7F2] text-xs font-semibold rounded-xs border border-[#1A1816] hover:bg-[#2B2724] text-center"
+                className="btn-kofi-primary w-full py-3.5 text-center text-[15px]"
               >
                 Claim a founding slot
               </Link>
@@ -262,81 +262,123 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* Add-ons and One-Time Projects */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-20">
-          <div className="border-b border-[#E8E2D6] pb-4 mb-8">
-            <h2 className="font-serif text-2xl font-medium text-[#1A1816]">
-              Add-ons & Specialized Projects
+        {/* Regular Growth Retainers */}
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8 mb-20">
+          <div className="border-b-2 border-[#000000] pb-4 mb-8 text-center sm:text-left">
+            <div className="text-[12px] font-bold uppercase text-[#202020]/60">
+              LONG-TERM COMPOUNDING
+            </div>
+            <h2 className="text-section-title">
+              Regular Growth Retainers
             </h2>
-            <p className="text-xs text-[#78716C] mt-1">
-              Stand-alone audits, creative sprints, and custom technical builds.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {addOns.map((ao, idx) => (
-              <div
-                key={idx}
-                className="bg-[#FFFFFF] border border-[#E8E2D6] p-6 rounded-xs space-y-3"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-serif text-base font-semibold text-[#1A1816]">
-                    {ao.service}
-                  </h3>
-                  <span className="text-xs font-mono font-semibold text-[#9C7D38] shrink-0">
-                    {ao.price}
-                  </span>
-                </div>
-                <p className="text-xs text-[#57534E] leading-relaxed">
-                  {ao.desc}
-                </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Starter */}
+            <div className="sticker-card p-6 space-y-4 flex flex-col justify-between bg-white">
+              <div>
+                <div className="text-[12px] font-bold text-[#202020]/60 uppercase">Starter</div>
+                <div className="font-display text-[28px] text-[#202020] mt-1">₹22,499<span className="text-xs font-normal text-[#202020]/70">/mo</span></div>
+                <p className="text-xs text-[#202020]/70 mt-1">Local business, 1 location</p>
+                <ul className="space-y-1.5 text-[12px] text-[#202020]/80 pt-3 border-t-2 border-[#e5e7eb] mt-3 font-medium">
+                  <li>• 25 keywords tracked</li>
+                  <li>• 20 AI prompts tested</li>
+                  <li>• 2 blogs / month</li>
+                  <li>• Homepage Schema</li>
+                  <li>• GBP + Local SEO</li>
+                </ul>
               </div>
-            ))}
+              <Link href="/ai-visibility-audit" className="btn-kofi-outline w-full text-center text-[13px] py-2">
+                Choose Starter
+              </Link>
+            </div>
+
+            {/* Growth */}
+            <div className="sticker-card p-6 space-y-4 flex flex-col justify-between bg-white">
+              <div>
+                <div className="text-[12px] font-bold text-[#202020]/60 uppercase">Growth</div>
+                <div className="font-display text-[28px] text-[#202020] mt-1">₹49,499<span className="text-xs font-normal text-[#202020]/70">/mo</span></div>
+                <p className="text-xs text-[#202020]/70 mt-1">Growing brand scaling</p>
+                <ul className="space-y-1.5 text-[12px] text-[#202020]/80 pt-3 border-t-2 border-[#e5e7eb] mt-3 font-medium">
+                  <li>• 50 keywords tracked</li>
+                  <li>• 40 AI prompts tested</li>
+                  <li>• 6 blogs / month</li>
+                  <li>• Schema for 10 pages</li>
+                  <li>• Quarterly strategy call</li>
+                </ul>
+              </div>
+              <Link href="/ai-visibility-audit" className="btn-kofi-outline w-full text-center text-[13px] py-2">
+                Choose Growth
+              </Link>
+            </div>
+
+            {/* AI Search Pro */}
+            <div className="sticker-card p-6 space-y-4 flex flex-col justify-between border-3 border-[#000000] bg-white">
+              <div>
+                <div className="text-[12px] font-bold text-[#202020] uppercase">AI Search Pro</div>
+                <div className="font-display text-[28px] text-[#202020] mt-1">₹53,999<span className="text-xs font-normal text-[#202020]/70">/mo</span></div>
+                <p className="text-xs text-[#202020]/70 mt-1">D2C brands & clinics</p>
+                <ul className="space-y-1.5 text-[12px] text-[#202020] pt-3 border-t-2 border-[#e5e7eb] mt-3 font-semibold">
+                  <li>• 100 keywords tracked</li>
+                  <li>• 100 AI prompts</li>
+                  <li>• 8 blogs / month</li>
+                  <li>• Full-site Schema</li>
+                  <li>• 4 authority citations</li>
+                  <li>• Monthly founder call</li>
+                </ul>
+              </div>
+              <Link href="/ai-visibility-audit" className="btn-kofi-primary w-full text-center text-[13px] py-2">
+                Choose Pro
+              </Link>
+            </div>
+
+            {/* Category Leader */}
+            <div className="sticker-card p-6 space-y-4 flex flex-col justify-between bg-white">
+              <div>
+                <div className="text-[12px] font-bold text-[#202020]/60 uppercase">Category Leader</div>
+                <div className="font-display text-[28px] text-[#202020] mt-1">₹1,12,499<span className="text-xs font-normal text-[#202020]/70">/mo</span></div>
+                <p className="text-xs text-[#202020]/70 mt-1">Multi-city & ₹25Cr+ brands</p>
+                <ul className="space-y-1.5 text-[12px] text-[#202020]/80 pt-3 border-t-2 border-[#e5e7eb] mt-3 font-medium">
+                  <li>• 250 keywords tracked</li>
+                  <li>• 300 AI prompts</li>
+                  <li>• 16 articles / month</li>
+                  <li>• Programmatic Schema</li>
+                  <li>• 10 authority PR links</li>
+                  <li>• Dedicated strategist</li>
+                </ul>
+              </div>
+              <Link href="/ai-visibility-audit" className="btn-kofi-outline w-full text-center text-[13px] py-2">
+                Choose Leader
+              </Link>
+            </div>
           </div>
         </section>
 
-        {/* Pricing FAQs */}
-        <section className="max-w-4xl mx-auto px-5 sm:px-8">
-          <div className="border-b border-[#E8E2D6] pb-4 mb-8 text-center">
-            <h2 className="font-serif text-2xl font-medium text-[#1A1816]">
-              Pricing & Billing FAQs
+        {/* Add-On Services */}
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8">
+          <div className="border-b-2 border-[#000000] pb-4 mb-8">
+            <div className="text-[12px] font-bold uppercase text-[#202020]/60">
+              CUSTOM EXTENSIONS
+            </div>
+            <h2 className="text-section-title">
+              Specialized Add-On Services
             </h2>
           </div>
 
-          <div className="space-y-4 text-xs sm:text-sm text-[#57534E]">
-            <div className="p-5 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-1.5">
-              <div className="font-serif text-base font-medium text-[#1A1816]">
-                Why is there a 3-month minimum commitment?
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {addOns.map((addon, idx) => (
+              <div key={idx} className="sticker-card p-7 space-y-3 bg-white">
+                <div className="text-[14px] font-bold text-[#202020]">
+                  {addon.price}
+                </div>
+                <h3 className="font-display text-[20px] text-[#202020]">
+                  {addon.service}
+                </h3>
+                <p className="text-[14px] text-[#202020]/80 leading-relaxed font-normal">
+                  {addon.desc}
+                </p>
               </div>
-              <p>
-                SEO and generative AI visibility require time to show compounding
-                effects. Search engine crawlers take 30–60 days to index new
-                schema, re-evaluate site architecture, and update model weights.
-                Three months is the honest minimum to deliver real movement.
-                After 90 days, you continue on a flexible month-to-month basis.
-              </p>
-            </div>
-
-            <div className="p-5 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-1.5">
-              <div className="font-serif text-base font-medium text-[#1A1816]">
-                Do you offer annual discounts?
-              </div>
-              <p>
-                Yes. If you choose to prepay for 10 months upfront, you receive
-                12 full consecutive months of retainer service.
-              </p>
-            </div>
-
-            <div className="p-5 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-1.5">
-              <div className="font-serif text-base font-medium text-[#1A1816]">
-                Is ad spend included in the Google/Meta ads fee?
-              </div>
-              <p>
-                No. You pay Google and Meta directly via your own corporate credit
-                card or billing account. Our fee covers strategy, tracking setup,
-                copywriting, and weekly bid optimization.
-              </p>
-            </div>
+            ))}
           </div>
         </section>
       </main>

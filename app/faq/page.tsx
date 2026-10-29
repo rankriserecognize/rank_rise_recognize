@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { ChevronRight, HelpCircle } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -55,19 +55,20 @@ export default function FaqPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col">
+    <div className="min-h-screen bg-[#e5e7eb] text-[#202020] flex flex-col font-sans selection:bg-[#aac9f7]">
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24">
-        <div className="max-w-4xl mx-auto px-5 sm:px-8 space-y-12">
+        <div className="max-w-[800px] mx-auto px-5 sm:px-8 space-y-12">
           <section className="space-y-4 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F4EFEA] border border-[#E0D8CB] rounded-xs text-[11px] font-mono uppercase tracking-widest text-[#786339] font-medium">
-              Common Inquiries
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[2px] border-black text-[13px] font-bold text-[#202020]">
+              <HelpCircle size={15} className="text-[#202020]" />
+              <span>KNOWLEDGE BASE</span>
             </div>
-            <h1 className="font-serif text-3xl sm:text-5xl text-[#1A1816] font-medium tracking-tight">
-              Questions we get asked most
+            <h1 className="font-display text-[44px] sm:text-[60px] text-[#202020] leading-none tracking-normal">
+              Questions we get asked most.
             </h1>
-            <p className="text-base sm:text-lg text-[#57534E]">
+            <p className="text-[17px] text-[#202020]/80 leading-relaxed max-w-lg mx-auto">
               Clear, honest answers about search, AI optimization, and how we work.
             </p>
           </section>
@@ -76,32 +77,39 @@ export default function FaqPage() {
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="p-6 bg-[#FFFFFF] border border-[#E8E2D6] rounded-xs space-y-2"
+                className="sticker-card p-6 sm:p-7 space-y-2 bg-white rounded-[24px] border-[2px] border-black"
               >
-                <h2 className="font-serif text-lg sm:text-xl font-medium text-[#1A1816]">
+                <h2 className="font-display text-[19px] sm:text-[21px] text-[#202020] leading-snug">
                   {faq.q}
                 </h2>
-                <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed pt-1 border-t border-[#F4EFEA]">
+                <p className="text-[15px] text-[#202020]/80 leading-relaxed pt-2 border-t border-black/10">
                   {faq.a}
                 </p>
               </div>
             ))}
           </section>
 
-          <section className="p-8 bg-[#1A1816] text-[#FAF7F2] rounded-xs text-center space-y-4">
-            <h2 className="font-serif text-2xl font-medium">
+          <section className="oat-feature-card p-8 sm:p-12 text-center space-y-5 rounded-[40px] border-[2.5px] border-black bg-[#e9dfd2]">
+            <h2 className="font-display text-[28px] sm:text-[38px] text-[#202020] leading-tight">
               Have a question not listed here?
             </h2>
-            <p className="text-xs sm:text-sm text-[#D6CFBE] max-w-md mx-auto">
-              Send us a direct note or request your complimentary AI visibility
+            <p className="text-[16px] text-[#202020]/80 max-w-md mx-auto leading-relaxed">
+              Send us a direct message or request your complimentary AI visibility
               audit report.
             </p>
-            <div className="pt-2 flex items-center justify-center gap-4">
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/ai-visibility-audit"
-                className="px-6 py-3 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold uppercase tracking-wider rounded-xs"
+                className="pill-btn-primary inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold"
               >
-                Get Free AI Visibility Check
+                <span>Get Free AI Audit</span>
+                <ChevronRight size={16} />
+              </Link>
+              <Link
+                href="/contact"
+                className="pill-btn-dark inline-flex items-center gap-2 px-8 py-3.5 text-[15px] font-semibold"
+              >
+                <span>Contact Strategists</span>
               </Link>
             </div>
           </section>

@@ -1,134 +1,263 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FAF7F2;
-  --foreground: #1A1816;
-  --ivory: #FAF7F2;
-  --cream: #F4EFEA;
-  --parchment: #EFE9DF;
-  --stone-subtle: #E8E2D6;
-  --stone-border: #DFD7C8;
-  --charcoal: #1A1816;
-  --charcoal-muted: #57534E;
-  --charcoal-soft: #78716C;
-  --gold-50: #FBF8F1;
-  --gold-100: #F6EED8;
-  --gold-200: #EADBB2;
-  --gold-300: #DCBF84;
-  --gold-400: #C7A45A;
-  --gold-500: #9C7D38;
-  --gold-600: #84682A;
-  --gold-700: #674E1A;
+  /* Colors — Ko-fi Warm Café Palette */
+  --color-oat-cream: #e9dfd2;
+  --color-morning-fog: #e5e7eb;
+  --color-ink-black: #202020;
+  --color-sticker-black: #000000;
+  --color-paper-white: #ffffff;
+  --color-kofi-blue: #aac9f7;
+  --color-cobalt-pop: #72a4f2;
+
+  --background: #e5e7eb;
+  --foreground: #202020;
+
+  --font-dm-sans: var(--font-dm-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-bogue-black: var(--font-bogue-black), 'Lilita One', 'Sniglet', 'Bowlby One', ui-sans-serif, cursive, sans-serif;
+
+  /* Typography — Scale */
+  --text-caption: 14px;
+  --leading-caption: 1.43;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-subheading: 20px;
+  --leading-subheading: 1.4;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.33;
+  --text-heading: 30px;
+  --leading-heading: 1.2;
+  --text-display: 60px;
+  --leading-display: 1;
+  --text-display-lg: 72px;
+  --leading-display-lg: 1;
+
+  /* Spacing */
+  --spacing-unit: 4px;
+  --section-gap: 64px;
+  --card-padding: 28px;
+  --element-gap: 20px;
+
+  /* Named Radii */
+  --radius-tags: 9999px;
+  --radius-cards: 40px;
+  --radius-inputs: 9999px;
+  --radius-buttons: 9999px;
+  --radius-feature-cards: 24px;
+  --radius-small-elements: 16px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-ivory: var(--ivory);
-  --color-cream: var(--cream);
-  --color-parchment: var(--parchment);
-  --color-stone-subtle: var(--stone-subtle);
-  --color-stone-border: var(--stone-border);
-  --color-charcoal: var(--charcoal);
-  --color-charcoal-muted: var(--charcoal-muted);
-  --color-charcoal-soft: var(--charcoal-soft);
-  --color-gold-50: var(--gold-50);
-  --color-gold-100: var(--gold-100);
-  --color-gold-200: var(--gold-200);
-  --color-gold-300: var(--gold-300);
-  --color-gold-400: var(--gold-400);
-  --color-gold-500: var(--gold-500);
-  --color-gold-600: var(--gold-600);
-  --color-gold-700: var(--gold-700);
-  --font-serif: var(--font-playfair);
-  --font-sans: var(--font-jakarta);
+  --color-oat-cream: var(--color-oat-cream);
+  --color-morning-fog: var(--color-morning-fog);
+  --color-ink-black: var(--color-ink-black);
+  --color-sticker-black: var(--color-sticker-black);
+  --color-paper-white: var(--color-paper-white);
+  --color-kofi-blue: var(--color-kofi-blue);
+  --color-cobalt-pop: var(--color-cobalt-pop);
+
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-bogue-black);
 }
 
 html {
   color-scheme: light;
   scroll-behavior: smooth;
-  background-color: #FAF7F2;
+  background-color: #e5e7eb;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #e5e7eb;
+  color: #202020;
+  font-family: var(--font-dm-sans);
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Headings font */
-h1, h2, h3, .font-serif-heading {
-  font-family: var(--font-serif), Georgia, serif;
-  letter-spacing: -0.02em;
+/* Chunky Rounded Display Typography (bogue-black / Lilita One) */
+.font-display {
+  font-family: var(--font-bogue-black);
+  letter-spacing: -0.01em;
+  line-height: 1.05;
 }
 
-/* Custom Scrollbar - Warm Muted Bronze & Ivory */
-::-webkit-scrollbar {
-  width: 8px;
+.text-display-hero {
+  font-family: var(--font-bogue-black);
+  font-size: clamp(38px, 6.5vw, 68px);
+  line-height: 1.02;
+  color: #202020;
 }
 
-::-webkit-scrollbar-track {
-  background: #FAF7F2;
+.text-section-title {
+  font-family: var(--font-bogue-black);
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.1;
+  color: #202020;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #DFD7C8;
-  border-radius: 4px;
+/* Sticker Card: White fill, 40px radius, 2.5px solid #000000 border, NO SHADOW, tactile spring hover */
+.sticker-card {
+  background-color: #ffffff;
+  border-radius: 40px;
+  border: 2.5px solid #000000;
+  box-shadow: none;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.2s ease-out;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #9C7D38;
+.sticker-card:hover {
+  transform: translateY(-5px);
 }
 
-::selection {
-  background: rgba(156, 125, 56, 0.22);
-  color: #1A1816;
+/* Oat Feature Card: Oat Cream (#e9dfd2) fill, 24px radius, 2px black border */
+.oat-feature-card {
+  background-color: #e9dfd2;
+  border-radius: 24px;
+  border: 2px solid #000000;
+  box-shadow: none;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Classic Luxury Cards & Elevation */
-.classic-card {
-  background: #FFFFFF;
-  border: 1px solid #E8E2D6;
-  box-shadow: 0 4px 20px -2px rgba(26, 24, 22, 0.03), 0 1px 3px rgba(26, 24, 22, 0.02);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+.oat-feature-card:hover {
+  transform: translateY(-3px);
 }
 
-.classic-card:hover {
-  border-color: #C7A45A;
-  box-shadow: 0 14px 35px -8px rgba(156, 125, 56, 0.12), 0 2px 6px rgba(26, 24, 22, 0.03);
+/* Tag Pill: 9999px pill, white fill, 2px border */
+.tag-pill {
+  background-color: #ffffff;
+  border-radius: 9999px;
+  border: 2px solid #000000;
+  padding: 8px 20px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #202020;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tag-pill:hover,
+.tag-pill.active {
+  background-color: #e9dfd2;
   transform: translateY(-2px);
 }
 
-/* Subtle architectural hairline border */
-.border-antique {
-  border-color: #E2DBD0;
+.tag-pill:active {
+  transform: translateY(1px) scale(0.97);
 }
 
-.border-antique-gold {
-  border-color: #C7A45A;
+/* Pill Primary Button: Cobalt Pop (#72a4f2), #202020 text, 9999px radius, 2px solid #000000 */
+.btn-kofi-primary {
+  background-color: #72a4f2;
+  color: #202020;
+  border-radius: 9999px;
+  border: 2px solid #000000;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: none;
+  transition: background-color 0.15s ease-in-out, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Antique Gold Metallic Text & Badges */
-.text-gold-antique {
-  color: #9C7D38;
+.btn-kofi-primary:hover {
+  background-color: #aac9f7;
+  transform: translateY(-2px) scale(1.01);
 }
 
-.bg-gold-subtle {
-  background-color: #F8F4EA;
+.btn-kofi-primary:active {
+  transform: translateY(1.5px) scale(0.97);
 }
 
-/* Micro noise or refined paper sheen */
-.subtle-paper {
-  background-color: #FAF7F2;
-  background-image: radial-gradient(#DFD7C8 0.65px, transparent 0.65px);
-  background-size: 24px 24px;
+/* Pill Dark Button: Ink Black (#202020) fill with #ffffff text, 9999px radius */
+.btn-kofi-dark {
+  background-color: #202020;
+  color: #ffffff;
+  border-radius: 9999px;
+  border: 2px solid #000000;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: none;
+  transition: background-color 0.15s ease-in-out, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Smooth Canvas Container */
-.canvas-container {
-  touch-action: none;
+.btn-kofi-dark:hover {
+  background-color: #000000;
+  transform: translateY(-2px) scale(1.01);
+}
+
+.btn-kofi-dark:active {
+  transform: translateY(1.5px) scale(0.97);
+}
+
+/* Pill Outline Button: Oat cream or white with 2px black border */
+.btn-kofi-outline {
+  background-color: #ffffff;
+  color: #202020;
+  border-radius: 9999px;
+  border: 2px solid #000000;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-kofi-outline:hover {
+  background-color: #e9dfd2;
+  transform: translateY(-1px);
+}
+
+/* Pill Capsule Input Field */
+.kofi-input {
+  background-color: #ffffff;
+  color: #202020;
+  font-size: 15px;
+  border-radius: 9999px;
+  border: 2px solid #000000;
+  padding: 12px 24px;
+  outline: none;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.kofi-input:focus {
+  border-color: #72a4f2;
+}
+
+/* Custom Scrollbar — Warm Cream */
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e5e7eb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #202020;
+  border-radius: 9999px;
+  border: 2px solid #e5e7eb;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #000000;
+}
+
+::selection {
+  background: #aac9f7;
+  color: #202020;
 }

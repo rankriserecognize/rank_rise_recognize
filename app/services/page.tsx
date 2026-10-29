@@ -10,9 +10,8 @@ import {
   TrendingUp,
   Layout,
   Wrench,
-  ArrowRight,
-  Sparkles,
   Check,
+  ArrowRight,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -103,20 +102,20 @@ export default function ServicesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col">
+    <div className="min-h-screen bg-[#e5e7eb] text-[#202020] flex flex-col font-sans">
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24">
         {/* Header */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-16">
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8 mb-16">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#F4EFEA] border border-[#E0D8CB] rounded-xs text-[11px] font-mono uppercase tracking-widest text-[#786339] font-medium">
-              Services Hub
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#ffffff] border-2 border-[#000000] text-[12px] font-bold text-[#202020] uppercase tracking-wider">
+              SERVICES DIRECTORY
             </div>
-            <h1 className="font-serif text-4xl sm:text-5xl text-[#1A1816] font-medium tracking-tight leading-tight">
+            <h1 className="text-display-hero">
               Everything you need to be found, chosen and recommended
             </h1>
-            <p className="text-base sm:text-lg text-[#57534E] leading-relaxed">
+            <p className="text-[18px] text-[#202020]/80 leading-relaxed font-normal">
               Your customers search in three places: Google search results,
               Google&apos;s AI summaries, and AI assistants like ChatGPT. Our
               core services win all three. Our growth services turn that
@@ -126,12 +125,12 @@ export default function ServicesPage() {
         </section>
 
         {/* 1. Core Search Visibility */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-20">
-          <div className="border-b border-[#E8E2D6] pb-4 mb-8">
-            <div className="text-xs font-mono uppercase tracking-wider text-[#9C7D38] font-semibold">
-              Category 01
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8 mb-20">
+          <div className="border-b-2 border-[#000000] pb-4 mb-8">
+            <div className="text-[12px] font-bold uppercase text-[#72a4f2]">
+              DISCIPLINE 01
             </div>
-            <h2 className="font-serif text-2xl font-medium text-[#1A1816]">
+            <h2 className="text-section-title">
               Core Search Visibility
             </h2>
           </div>
@@ -142,38 +141,38 @@ export default function ServicesPage() {
               return (
                 <div
                   key={idx}
-                  className="classic-card p-8 rounded-xs space-y-5 flex flex-col justify-between"
+                  className="sticker-card p-8 sm:p-10 space-y-6 flex flex-col justify-between bg-white"
                 >
                   <div className="space-y-4">
-                    <div className="w-12 h-12 rounded-xs bg-[#FAF7F2] border border-[#E8E2D6] flex items-center justify-center text-[#9C7D38]">
+                    <div className="w-12 h-12 rounded-full bg-[#72a4f2] border-2 border-[#000000] flex items-center justify-center text-[#202020]">
                       <Icon size={22} />
                     </div>
                     <div>
-                      <h3 className="font-serif text-2xl font-medium text-[#1A1816]">
+                      <h3 className="font-display text-[26px] text-[#202020]">
                         {srv.title}
                       </h3>
-                      <p className="text-xs font-mono text-[#78716C] mt-1">
+                      <p className="text-[14px] text-[#202020]/75 font-semibold mt-1">
                         {srv.tagline}
                       </p>
                     </div>
 
-                    <ul className="space-y-2 text-xs text-[#57534E] pt-2 border-t border-[#F4EFEA]">
+                    <ul className="space-y-2.5 text-[14px] text-[#202020]/80 pt-3 border-t-2 border-[#e5e7eb] font-medium">
                       {srv.bullets.map((b, bIdx) => (
                         <li key={bIdx} className="flex items-center gap-2">
-                          <Check size={14} className="text-[#9C7D38] shrink-0" />
+                          <Check size={16} className="text-[#000000] shrink-0" />
                           <span>{b}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="pt-4 border-t border-[#F4EFEA]">
+                  <div className="pt-4 border-t-2 border-[#e5e7eb]">
                     <Link
                       href="/#pricing"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9C7D38] hover:text-[#84682A]"
+                      className="inline-flex items-center gap-2 font-bold text-[14px] text-[#202020] hover:underline"
                     >
                       <span>View packages & pricing</span>
-                      <ArrowRight size={13} />
+                      <ArrowRight size={14} />
                     </Link>
                   </div>
                 </div>
@@ -182,13 +181,13 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* 2. Growth: Leads and Sales */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-20">
-          <div className="border-b border-[#E8E2D6] pb-4 mb-8">
-            <div className="text-xs font-mono uppercase tracking-wider text-[#9C7D38] font-semibold">
-              Category 02
+        {/* 2. Growth Services */}
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8 mb-20">
+          <div className="border-b-2 border-[#000000] pb-4 mb-8">
+            <div className="text-[12px] font-bold uppercase text-[#202020]/60">
+              DISCIPLINE 02
             </div>
-            <h2 className="font-serif text-2xl font-medium text-[#1A1816]">
+            <h2 className="text-section-title">
               Growth: Leads & Sales Conversion
             </h2>
           </div>
@@ -199,15 +198,15 @@ export default function ServicesPage() {
               return (
                 <div
                   key={idx}
-                  className="bg-[#FFFFFF] border border-[#E8E2D6] p-6 rounded-xs space-y-3"
+                  className="sticker-card p-7 space-y-3 bg-white"
                 >
-                  <div className="w-10 h-10 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
-                    <Icon size={20} />
+                  <div className="w-10 h-10 rounded-full bg-[#e9dfd2] border-2 border-[#000000] flex items-center justify-center text-[#202020]">
+                    <Icon size={18} />
                   </div>
-                  <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  <h3 className="font-display text-[22px] text-[#202020]">
                     {srv.title}
                   </h3>
-                  <p className="text-xs text-[#57534E] leading-relaxed">
+                  <p className="text-[14px] text-[#202020]/80 leading-relaxed font-normal">
                     {srv.desc}
                   </p>
                 </div>
@@ -216,13 +215,13 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* 3. Foundation: Website Engineering */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8 mb-20">
-          <div className="border-b border-[#E8E2D6] pb-4 mb-8">
-            <div className="text-xs font-mono uppercase tracking-wider text-[#9C7D38] font-semibold">
-              Category 03
+        {/* 3. Foundation */}
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8 mb-20">
+          <div className="border-b-2 border-[#000000] pb-4 mb-8">
+            <div className="text-[12px] font-bold uppercase text-[#202020]/60">
+              DISCIPLINE 03
             </div>
-            <h2 className="font-serif text-2xl font-medium text-[#1A1816]">
+            <h2 className="text-section-title">
               Foundation: High-Performance Websites
             </h2>
           </div>
@@ -233,15 +232,15 @@ export default function ServicesPage() {
               return (
                 <div
                   key={idx}
-                  className="bg-[#FFFFFF] border border-[#E8E2D6] p-6 rounded-xs space-y-3"
+                  className="sticker-card p-7 space-y-3 bg-white"
                 >
-                  <div className="w-10 h-10 rounded-xs bg-[#FAF7F2] text-[#9C7D38] flex items-center justify-center">
-                    <Icon size={20} />
+                  <div className="w-10 h-10 rounded-full bg-[#e9dfd2] border-2 border-[#000000] flex items-center justify-center text-[#202020]">
+                    <Icon size={18} />
                   </div>
-                  <h3 className="font-serif text-lg font-medium text-[#1A1816]">
+                  <h3 className="font-display text-[22px] text-[#202020]">
                     {srv.title}
                   </h3>
-                  <p className="text-xs text-[#57534E] leading-relaxed">
+                  <p className="text-[14px] text-[#202020]/80 leading-relaxed font-normal">
                     {srv.desc}
                   </p>
                 </div>
@@ -250,24 +249,23 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* Call to Action */}
-        <section className="max-w-7xl mx-auto px-5 sm:px-8">
-          <div className="p-8 sm:p-12 bg-[#1A1816] text-[#FAF7F2] rounded-xs text-center space-y-4">
-            <h2 className="font-serif text-2xl sm:text-3xl font-medium">
-              Not sure which service fits your current stage?
+        {/* Bottom CTA */}
+        <section className="max-w-[1200px] mx-auto px-5 sm:px-8">
+          <div className="oat-feature-card p-8 sm:p-12 text-center space-y-4">
+            <h2 className="font-display text-[28px] sm:text-[36px] text-[#202020]">
+              Not sure which capability fits your current stage?
             </h2>
-            <p className="text-xs sm:text-sm text-[#D6CFBE] max-w-lg mx-auto">
+            <p className="text-[16px] text-[#202020]/80 max-w-lg mx-auto font-normal">
               Get our complimentary 10-prompt AI visibility check. We&apos;ll audit
-              where you stand on Google, ChatGPT, and Gemini, and recommend the
-              exact priorities to address first.
+              where you stand on Google, ChatGPT, and Gemini.
             </p>
             <div className="pt-2">
               <Link
                 href="/ai-visibility-audit"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#FAF7F2] text-[#1A1816] text-xs font-semibold uppercase tracking-wider rounded-xs hover:bg-[#EAE2D5] transition-colors"
+                className="btn-kofi-primary text-[15px] px-8 py-3.5"
               >
-                <Sparkles size={14} className="text-[#9C7D38]" />
                 <span>Get Free AI Visibility Check</span>
+                <ArrowRight size={14} />
               </Link>
             </div>
           </div>

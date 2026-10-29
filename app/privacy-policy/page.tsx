@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ShieldCheck } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -9,21 +10,25 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#1A1816] flex flex-col">
+    <div className="min-h-screen bg-[#e5e7eb] text-[#202020] flex flex-col font-sans selection:bg-[#aac9f7]">
       <Navbar />
 
       <main className="flex-1 pt-32 pb-24">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 space-y-8">
-          <div className="space-y-2">
-            <h1 className="font-serif text-3xl sm:text-4xl font-medium text-[#1A1816]">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-[2px] border-black text-[13px] font-bold text-[#202020]">
+              <ShieldCheck size={15} className="text-[#202020]" />
+              <span>LEGAL TERMS</span>
+            </div>
+            <h1 className="font-display text-[44px] sm:text-[60px] text-[#202020] leading-none tracking-normal">
               Privacy Policy
             </h1>
-            <p className="text-xs font-mono text-[#78716C]">
+            <p className="text-[13px] font-semibold text-[#202020]/60">
               Last updated: October 2026 · Rank Rise Recognize
             </p>
           </div>
 
-          <div className="space-y-6 text-sm text-[#57534E] leading-relaxed">
+          <div className="sticker-card p-8 sm:p-12 space-y-6 text-[15px] text-[#202020]/80 leading-relaxed bg-white rounded-[40px] border-[2.5px] border-black">
             <p>
               At Rank Rise Recognize, we value your trust and are committed to
               protecting your personal and business data. This Privacy Policy
@@ -32,7 +37,7 @@ export default function PrivacyPolicyPage() {
               engage our marketing services.
             </p>
 
-            <h2 className="font-serif text-xl font-medium text-[#1A1816] pt-2">
+            <h2 className="font-display text-[22px] text-[#202020] pt-2">
               1. Information We Collect
             </h2>
             <p>
@@ -43,7 +48,7 @@ export default function PrivacyPolicyPage() {
               deliver monthly reporting.
             </p>
 
-            <h2 className="font-serif text-xl font-medium text-[#1A1816] pt-2">
+            <h2 className="font-display text-[22px] text-[#202020] pt-2">
               2. How We Use Your Information
             </h2>
             <p>
@@ -53,7 +58,7 @@ export default function PrivacyPolicyPage() {
               never sell, rent, or lease client information to third-party brokers.
             </p>
 
-            <h2 className="font-serif text-xl font-medium text-[#1A1816] pt-2">
+            <h2 className="font-display text-[22px] text-[#202020] pt-2">
               3. Analytics & Security
             </h2>
             <p>
@@ -63,17 +68,17 @@ export default function PrivacyPolicyPage() {
               data.
             </p>
 
-            <h2 className="font-serif text-xl font-medium text-[#1A1816] pt-2">
+            <h2 className="font-display text-[22px] text-[#202020] pt-2">
               4. Contact Us
             </h2>
             <p>
               If you have any questions about this Privacy Policy or wish to
               request data deletion, please contact us at{" "}
               <a
-                href="mailto:contact@rankriserecognize.com"
-                className="text-[#9C7D38] underline"
+                href="mailto:rankriserecognize@gmail.com"
+                className="text-[#202020] font-bold underline hover:text-[#72a4f2] transition-colors"
               >
-                contact@rankriserecognize.com
+                rankriserecognize@gmail.com
               </a>
               .
             </p>
